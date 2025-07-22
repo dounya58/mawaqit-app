@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "94444537651",
+    "project_id": "rouhaniyat-ddf02",
+    "storage_bucket": "rouhaniyat-ddf02.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:94444537651:android:129270e6e82946ce682046",
+        "android_client_info": {
+          "package_name": "com.mawaqit.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfPMUQ-wUDc7h5fLIH8IegUb_9jfPSGC4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

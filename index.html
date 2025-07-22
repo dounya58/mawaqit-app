@@ -1,0 +1,4486 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="تطبيق  مَوَاقِيتُ الإِيْمَان الإسلامي الشامل - مواقيت الصلاة، الأذكار، الأحاديث، القرآن، الزواج، التربية">
+    <title>  مَوَاقِيتُ الإِيْمَان- تطبيقك الإسلامي الشامل</title>
+  <link rel="icon" type="image/png" href="icon-512.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/moment-hijri@2.1.2/moment-hijri.min.js"></script>
+    <script type="module" src="firebase-config.js"></script>
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --light-gold: #F5E7A1;
+            --dark-gold: #B8860B;
+            --white: #FFFFFF;
+            --off-white: #F8F8F8;
+            --light-gray: #EEEEEE;
+            --dark: #333333;
+            --darker: #1a1a1a;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --green: #2e7d32;
+            --blue: #1976d2;
+            --purple: #7b1fa2;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--off-white) 0%, var(--white) 100%);
+            color: var(--darker);
+            min-height: 100vh;
+            padding-bottom: 80px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23f8f8f8" opacity="0.5"/><path d="M20,20 Q50,10 80,20 T100,50 T80,80 T50,90 T20,80 T0,50 T20,20 Z" fill="none" stroke="%23D4AF37" stroke-width="0.3" opacity="0.2"/></svg>');
+            background-attachment: fixed;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* الترويسة */
+   header {
+    background-image: url(image.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: white;
+    text-align: center;
+    padding: 30px 20px;
+    border-radius: 0 0 30px 30px;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 30px;
+}  
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: var(--gold);
+        }
+        
+        .app-title {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo {
+            font-size: 3.5rem;
+            color: white;
+            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.1);
+            width: 90px;
+            height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin: 10px 0;
+            color: var(--white);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .app-description {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 20px;
+            line-height: 1.6;
+            color: var(--light-gold);
+        }
+        
+        /* التنقل */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            background: var(--white);
+            border-radius: 50px;
+            padding: 10px;
+            margin: 30px auto;
+            max-width: 900px;
+            box-shadow: var(--shadow);
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 12px 25px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            margin: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+        }
+        
+        .tab.active {
+            background: var(--gold);
+            color: var(--white);
+            box-shadow: 0 4px 10px rgba(212, 175, 55, 0.4);
+        }
+        
+        .tab:hover:not(.active) {
+            background: var(--light-gold);
+        }
+        
+        /* أقسام المحتوى */
+        .content-section {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 35px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            display: none;
+            border: 1px solid var(--light-gold);
+            animation: fadeIn 0.8s ease forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        .section-title {
+            color: var(--dark-gold);
+            font-size: 2rem;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid var(--light-gold);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        /* قسم مواقيت الصلاة */
+        .prayer-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .prayer-times {
+            flex: 2;
+            min-width: 300px;
+        }
+        
+        .prayer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .prayer-card {
+            background: var(--off-white);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: var(--transition);
+            border-left: 4px solid transparent;
+        }
+        
+        .prayer-card.active {
+            background: linear-gradient(135deg, var(--light-gold) 0%, var(--gold) 100%);
+            color: var(--darker);
+            border-left: 4px solid var(--dark-gold);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+        }
+        
+        .prayer-card.next {
+            background: rgba(212, 175, 55, 0.2);
+            border-left: 4px solid var(--gold);
+        }
+        
+        .prayer-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--dark-gold);
+        }
+        
+        .prayer-card.active .prayer-name,
+        .prayer-card.next .prayer-name {
+            color: var(--darker);
+        }
+        
+        .prayer-time {
+            font-size: 1.6rem;
+            font-weight: 600;
+        }
+        
+        .prayer-card i {
+            font-size: 1.5rem;
+            margin-top: 10px;
+            color: var(--dark-gold);
+        }
+        
+        .prayer-card.active i,
+        .prayer-card.next i {
+            color: var(--darker);
+        }
+        
+        .location-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--off-white);
+            border-radius: 15px;
+            padding: 15px 25px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .location-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .location-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .form-control {
+            padding: 10px 15px;
+            border-radius: 10px;
+            border: 1px solid var(--light-gold);
+            background: var(--white);
+            font-size: 1rem;
+            min-width: 150px;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+        }
+        
+        .btn {
+            background: var(--gold);
+            color: var(--white);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 8px rgba(212, 175, 55, 0.3);
+        }
+        
+        .btn:hover {
+            background: var(--dark-gold);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(212, 175, 55, 0.4);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        /* إعدادات الولايات */
+        .settings-card {
+            background: var(--off-white);
+            border-radius: 20px;
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--light-gold);
+        }
+        
+        .settings-title {
+            font-size: 1.5rem;
+            color: var(--dark-gold);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .settings-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--darker);
+        }
+        
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--light-gold);
+            background: var(--white);
+            font-size: 1rem;
+        }
+        
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+        }
+        
+        .notification-settings {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .notification-settings input {
+            width: 20px;
+            height: 20px;
+        }
+        
+        /* قسم الأذان */
+        .athan-container {
+            flex: 1;
+            min-width: 300px;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--dark-gold) 100%);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+        }
+        
+        .athan-title {
+            font-size: 2rem;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .athan-player {
+            width: 100%;
+            border-radius: 15px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+        }
+        
+        audio {
+            width: 100%;
+            outline: none;
+        }
+        
+        audio::-webkit-media-controls-panel {
+            background: var(--light-gold);
+            border-radius: 10px;
+        }
+        
+        /* تنبيهات الصلاة الثابتة */
+        .prayer-notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--dark-gold) 100%);
+            color: white;
+            padding: 20px 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: none;
+            max-width: 350px;
+            animation: slideIn 0.5s ease forwards;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .prayer-notification h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .prayer-notification p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .notification-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .notification-btn {
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .notification-btn.primary {
+            background: white;
+            color: var(--dark-gold);
+        }
+
+        .notification-btn.secondary {
+            background: transparent;
+            color: white;
+            border: 1px solid white;
+        }
+
+        .notification-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        /* التكيف مع الأجهزة المحمولة */
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 1.6rem;
+            }
+            
+            .prayer-container {
+                flex-direction: column;
+            }
+            
+            .prayer-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            .settings-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .prayer-notification {
+                right: 10px;
+                left: 10px;
+                max-width: calc(100% - 20px);
+            }
+        }
+        
+        /* قسم الأذكار */
+        .azkar-tabs {
+            display: flex;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--light-gold);
+            flex-wrap: wrap;
+            overflow-x: auto;
+        }
+        
+        .azkar-tab {
+            padding: 15px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+            font-size: 1rem;
+            white-space: nowrap;
+        }
+        
+        .azkar-tab.active {
+            color: var(--gold);
+            border-bottom: 3px solid var(--gold);
+        }
+        
+        .azkar-tab:hover:not(.active) {
+            background: var(--off-white);
+        }
+        
+        .azkar-content {
+            min-height: 300px;
+        }
+        
+        .azkar-list {
+            display: none;
+        }
+        
+        .azkar-list.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .zekr {
+            background: var(--off-white);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 5px solid var(--gold);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+        
+        .zekr:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .zekr-content {
+            font-size: 1.5rem;
+            line-height: 1.9;
+            margin-bottom: 20px;
+            color: var(--darker);
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .zekr-reference {
+            text-align: center;
+            color: var(--dark-gold);
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .count-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .count-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--gold);
+            border: none;
+            color: var(--white);
+            font-weight: bold;
+            font-size: 1.3rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            box-shadow: 0 3px 8px rgba(212, 175, 55, 0.3);
+        }
+        
+        .count-btn:hover {
+            background: var(--dark-gold);
+            transform: scale(1.1);
+        }
+        
+        .count-display {
+            margin: 0 20px;
+            font-size: 1.5rem;
+            min-width: 50px;
+            text-align: center;
+            font-weight: 700;
+            color: var(--dark-gold);
+            background: var(--light-gold);
+            border-radius: 50%;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* قسم القرآن */
+        .quran-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .memorization-plan {
+            flex: 1;
+            min-width: 300px;
+            background: linear-gradient(135deg, var(--off-white) 0%, var(--white) 100%);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .progress-container {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--light-gold);
+        }
+        
+        .progress-title {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--dark-gold);
+        }
+        
+        .progress-bar {
+            height: 25px;
+            background: var(--light-gray);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--gold) 0%, var(--dark-gold) 100%);
+            border-radius: 15px;
+            width: 45%;
+            position: relative;
+            transition: width 1s ease;
+        }
+        
+        .progress-text {
+            position: absolute;
+            right: 15px;
+            top: 0;
+            color: white;
+            font-weight: 700;
+            line-height: 25px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* أنماط قسم حفظ القرآن الجديد */
+.quran-guide {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.guide-card {
+    background: var(--off-white);
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    border-left: 5px solid var(--gold);
+    transition: var(--transition);
+}
+
+.guide-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.guide-card h3 {
+    color: var(--dark-gold);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.4rem;
+}
+
+.guide-card p {
+    line-height: 1.8;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.guide-card ul {
+    padding-right: 20px;
+    margin-top: 10px;
+}
+
+.guide-card li {
+    margin-bottom: 10px;
+    line-height: 1.6;
+    position: relative;
+    padding-right: 15px;
+}
+
+.guide-card li:before {
+    content: "•";
+    color: var(--gold);
+    font-weight: bold;
+    position: absolute;
+    right: 0;
+}
+
+.method {
+    background: rgba(212, 175, 55, 0.1);
+    border-radius: 15px;
+    padding: 15px;
+    margin: 15px 0;
+}
+
+.method h4 {
+    color: var(--dark);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.2rem;
+}
+
+.step {
+    display: flex;
+    gap: 15px;
+    margin: 20px 0;
+    align-items: flex-start;
+}
+
+.step-number {
+    background: var(--gold);
+    color: white;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    flex-shrink: 0;
+    font-size: 1.1rem;
+}
+
+.step-content h4 {
+    margin-bottom: 5px;
+    color: var(--dark);
+}
+
+.dua-card {
+    background: linear-gradient(135deg, var(--light-gold) 0%, var(--gold) 100%);
+    color: var(--darker);
+    border-left: 5px solid var(--dark-gold);
+}
+
+.dua {
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 15px;
+    padding: 15px;
+    margin: 15px 0;
+    text-align: center;
+}
+
+.dua p:first-child {
+    font-size: 1.4rem;
+    line-height: 1.8;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.dua p:last-child {
+    color: var(--dark-gold);
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .quran-guide {
+        grid-template-columns: 1fr;
+    }
+    
+    .guide-card {
+        padding: 20px;
+    }
+}
+        
+        /* الأقسام الجديدة */
+        .tips-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .tip-card {
+            background: var(--off-white);
+            border-radius: 20px;
+            padding: 30px;
+            transition: var(--transition);
+            border-left: 5px solid var(--gold);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tip-card:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gold);
+        }
+        
+        .tip-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--dark-gold);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .tip-card p {
+            line-height: 1.8;
+            color: #555;
+        }
+        
+        .story-card {
+            background: var(--off-white);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-left: 5px solid var(--gold);
+            position: relative;
+        }
+        
+        .story-card:before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            font-size: 5rem;
+            color: var(--gold);
+            opacity: 0.2;
+        }
+        
+        .story-title {
+            font-size: 1.8rem;
+            color: var(--dark-gold);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .story-content {
+            font-size: 1.3rem;
+            line-height: 1.9;
+            margin-bottom: 25px;
+            text-align: justify;
+        }
+        
+        .lesson {
+            background: var(--light-gold);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            font-size: 1.2rem;
+            line-height: 1.8;
+        }
+        
+        /* قسم النية اليومية */
+        .intention-card {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--dark-gold) 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+        }
+        
+        .intention-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .intention-text {
+            font-size: 1.4rem;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+        
+        /* قسم بناء بيت إسلامي */
+        .building-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .step-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-top: 5px solid var(--gold);
+            transition: var(--transition);
+        }
+        
+        .step-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .step-number {
+            background: var(--gold);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        /* قسم تأملات الأسماء الحسنى */
+.names-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+}
+
+.name-card {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: var(--shadow);
+    border-left: 5px solid var(--gold);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.name-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.name-card:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 5px;
+    background: var(--gold);
+}
+
+.name-title {
+    font-size: 1.8rem;
+    color: var(--dark-gold);
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.name-meaning {
+    font-size: 1.3rem;
+    color: var(--dark);
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.name-reflection {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #555;
+    text-align: right;
+}
+
+@media (max-width: 768px) {
+    .names-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .name-title {
+        font-size: 1.6rem;
+    }
+    
+    .name-meaning {
+        font-size: 1.2rem;
+    }
+}
+        
+        /* قسم الحديث اليومي */
+.hadith-card {
+    background: var(--off-white);
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: var(--shadow);
+    border-left: 5px solid var(--gold);
+}
+
+.hadith-text {
+    font-size: 1.2rem;
+    line-height: 1.4;
+    margin-bottom: 20px;
+    text-align: center;
+    color: var(--darker);
+    font-weight: 500;
+}
+
+.hadith-reference {
+    text-align: center;
+    color: var(--dark-gold);
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.hadith-explanation {
+    background: rgba(212, 175, 55, 0.1);
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 20px;
+    font-size: 1.2rem;
+    line-height: 1.4;
+}
+
+.hadith-explanation h4 {
+    color: var(--dark-gold);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.hadith-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+/* التاريخ الهجري والميلادي */
+.date-display {
+    text-align: center;
+    font-size: 1.2rem;
+    margin: 10px 0;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.date-display span {
+    background: var(--off-white);
+    padding: 8px 15px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* مؤقت الصلاة القادمة */
+.countdown-display {
+    text-align: center;
+    font-size: 1.3rem;
+    color: var(--green);
+    margin-bottom: 20px;
+    background: rgba(46, 125, 50, 0.1);
+    padding: 12px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 auto 20px;
+    display: flex;
+    justify-content: center;
+}
+/* أنماط قسم معلومات التطبيق */
+.app-info-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.app-info-card {
+    background: var(--off-white);
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    border-left: 5px solid var(--gold);
+    transition: var(--transition);
+}
+
+.app-info-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.app-info-card h3 {
+    color: var(--dark-gold);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.4rem;
+}
+
+.app-info-card p, .app-info-card li {
+    line-height: 1.8;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.app-info-card ul {
+    padding-right: 20px;
+    margin-top: 10px;
+}
+
+.app-info-card li {
+    margin-bottom: 10px;
+    line-height: 1.6;
+    position: relative;
+    padding-right: 15px;
+}
+
+.app-info-card li:before {
+    content: "•";
+    color: var(--gold);
+    font-weight: bold;
+    position: absolute;
+    right: 0;
+}
+
+.contact-card {
+    background: rgba(212, 175, 55, 0.1);
+}
+
+.address {
+    margin-top: 20px;
+    background: rgba(255, 255, 255, 0.5);
+    padding: 15px;
+    border-radius: 15px;
+    border-left: 3px solid var(--gold);
+}
+
+.share-btn {
+    background: var(--green);
+}
+
+.rate-btn {
+    background: var(--gold);
+}
+
+@media (max-width: 768px) {
+    .app-info-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .app-info-card {
+        padding: 20px;
+    }
+}
+/* إصلاحات للهواتف - تضاف في نهاية الـ CSS */
+@media (max-width: 480px) {
+    .tabs {
+        flex-direction: column;
+        align-items: stretch;
+        border-radius: 15px;
+    }
+    
+    .tab {
+        width: 100%;
+        text-align: center;
+        margin: 3px 0;
+    }
+    
+    .content-section {
+        padding: 20px;
+    }
+    
+    .section-title {
+        font-size: 1.5rem;
+        padding-bottom: 15px;
+    }
+    
+    .prayer-grid, 
+    .tips-container, 
+    .building-steps, 
+    .names-grid,
+    .app-info-container,
+    .quran-guide {
+        grid-template-columns: 1fr !important;
+        gap: 15px;
+    }
+    
+    .prayer-card, 
+    .zekr, 
+    .guide-card, 
+    .tip-card, 
+    .step-card, 
+    .name-card,
+    .app-info-card {
+        padding: 15px;
+    }
+    
+    .location-form {
+        flex-direction: column;
+    }
+    
+    .location-form .form-control,
+    .location-form select,
+    .location-form input {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .azkar-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 10px;
+    }
+    
+    .azkar-tab {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
+    
+    .zekr-content {
+        font-size: 1.2rem;
+    }
+    
+    .count-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 1.1rem;
+    }
+    
+    .count-display {
+        height: 40px;
+        width: 40px;
+        font-size: 1.3rem;
+    }
+    
+    .hadith-navigation {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .hadith-navigation .btn {
+        width: 100%;
+    }
+    
+    .intention-text {
+        font-size: 1.2rem;
+    }
+    
+    .date-display {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .date-display span {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* تحسينات إضافية للشاشات الصغيرة جداً */
+@media (max-width: 360px) {
+    .app-title h1 {
+        font-size: 2rem;
+    }
+    
+    .app-description {
+        font-size: 1rem;
+    }
+    
+    .section-title {
+        font-size: 1.3rem;
+    }
+    
+    .prayer-name {
+        font-size: 1rem;
+    }
+    
+    .prayer-time {
+        font-size: 1.3rem;
+    }
+    
+    .zekr-content {
+        font-size: 1.1rem;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+    <div class="prayer-notification" id="prayerNotification">
+        <h3><i class="fas fa-bell"></i> حان وقت الصلاة</h3>
+        <p id="notificationText">حان الآن وقت صلاة الفجر، هيا بنا إلى الصلاة!</p>
+        <div class="notification-buttons">
+            <button class="notification-btn secondary" onclick="snoozeNotification()">تذكير لاحق</button>
+            <button class="notification-btn primary" onclick="closeNotification()">تم</button>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- الترويسة -->
+        <header>
+            <div class="app-title">
+                <div class="logo">
+                    <i class="fas fa-mosque"></i>
+                </div>
+                <h1> مَوَاقِيتُ الإِيْمَان </h1>
+                <p class="app-description">تطبيقك الإسلامي الشامل للصلاة، الأذكار، الأحاديث، القرآن، الزواج، التربية، وأكثر. يعمل بدون إنترنت!</p>
+            </div>
+        </header>
+        
+        <!-- أشرطة التنقل -->
+        <div class="tabs">
+            <div class="tab active" data-target="prayer-times">
+                <i class="fas fa-clock"></i> أوقات الصلاة
+            </div>
+            <div class="tab" data-target="azkar">
+                <i class="fas fa-praying-hands"></i> الأذكار
+            </div>
+            <div class="tab" data-target="quran">
+                <i class="fas fa-quran"></i> حفظ القرآن
+            </div>
+            <div class="tab" data-target="hadith">
+                <i class="fas fa-book"></i> الحديث اليومي
+            </div>
+            <div class="tab" data-target="marriage">
+                <i class="fas fa-ring"></i> نصائح الزواج
+            </div>
+            <div class="tab" data-target="parenting">
+                <i class="fas fa-child"></i> تربية الأبناء
+            </div>
+            <div class="tab" data-target="relations">
+                <i class="fas fa-people-arrows"></i> معاملة الناس
+            </div>
+            <div class="tab" data-target="prophet-stories">
+                <i class="fas fa-book-open"></i> قصص الأنبياء
+            </div>
+            <div class="tab" data-target="daily-intention">
+                <i class="fas fa-heart"></i> النية اليومية
+            </div>
+            <div class="tab" data-target="islamic-home">
+                <i class="fas fa-home"></i> بناء بيت إسلامي
+            </div>
+            <div class="tab" data-target="names-of-allah">
+                <i class="fas fa-pray"></i> تأملات الأسماء الحسنى
+            </div>
+        </div>
+        
+        <!-- قسم أوقات الصلاة المحسّن -->
+        <div id="prayer-times" class="content-section active">
+            <h2 class="section-title">
+                <i class="fas fa-clock"></i> مواقيت الصلاة
+            </h2>
+            
+            <!-- عرض التاريخ الهجري والميلادي -->
+            <div class="date-display">
+                <span id="gregorianDate"><i class="fas fa-calendar-alt"></i> التاريخ الميلادي: جاري التحميل...</span>
+                <span id="hijriDate"><i class="fas fa-mosque"></i> التاريخ الهجري: جاري التحميل...</span>
+            </div>
+            
+            <!-- مؤقت الصلاة القادمة -->
+            <div class="countdown-display" id="countdownToNextPrayer">
+                <i class="fas fa-hourglass-half"></i> جاري تحديد الصلاة القادمة...
+            </div>
+            
+            <div class="prayer-container">
+                <div class="prayer-times">
+                    <div class="prayer-grid" id="prayerGrid">
+                        <!-- سيتم تعبئة أوقات الصلاة عبر الجافاسكريبت -->
+                    </div>
+                    
+                    <div class="location-controls">
+                        <div class="location-info">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span id="locationInfo">جاري تحديد موقعك...</span>
+                        </div>
+                        <div class="location-form">
+                            <select id="country-select" class="form-control">
+                                <option value="DZ">الجزائر</option>
+                                <option value="MA">المغرب</option>
+                                <option value="TN">تونس</option>
+                                <option value="EG">مصر</option>
+                                <option value="SA">السعودية</option>
+                                <option value="AE">الإمارات</option>
+                                <option value="KW">الكويت</option>
+                                <option value="QA">قطر</option>
+                                <option value="BH">البحرين</option>
+                                <option value="OM">عمان</option>
+                                <option value="YE">اليمن</option>
+                                <option value="IQ">العراق</option>
+                                <option value="SY">سوريا</option>
+                                <option value="JO">الأردن</option>
+                                <option value="LB">لبنان</option>
+                                <option value="PS">فلسطين</option>
+                                <option value="SD">السودان</option>
+                                <option value="LY">ليبيا</option>
+                                <option value="SO">الصومال</option>
+                                <option value="DJ">جيبوتي</option>
+                                <option value="MR">موريتانيا</option>
+                                <option value="TR">تركيا</option>
+                            </select>
+                            <input type="text" id="city-input" class="form-control" placeholder="اسم المدينة">
+                            <button class="btn" id="search-btn">
+                                <i class="fas fa-search"></i> بحث
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- إعدادات الصلاة -->
+                    <div class="settings-card">
+                        <h3 class="settings-title">
+                            <i class="fas fa-cog"></i> إعدادات الصلاة
+                        </h3>
+                        <div class="settings-form">
+                            <div class="form-group">
+                                <label for="method-select">طريقة الحساب:</label>
+                                <select id="method-select" class="form-control">
+                                    <option value="2">جامعة أم القرى (مكة)</option>
+                                    <option value="1">رابطة العالم الإسلامي</option>
+                                    <option value="3">الهيئة المصرية للمساحة</option>
+                                    <option value="4">جامعة العلوم الإسلامية (كراتشي)</option>
+                                    <option value="5">إدارة الشؤون الإسلامية (الكويت)</option>
+                                    <option value="7">رابطة العالم الإسلامي (مكة)</option>
+                                    <option value="8">المجلس الإسلامي (سنغافورة)</option>
+                                    <option value="9">اللجنة الدينية (تركيا)</option>
+                                    <option value="10">الجامع الأزهر (مصر)</option>
+                                </select>
+                            </div>
+                            <div class="notification-settings">
+                                <input type="checkbox" id="prayer-notification-toggle" checked>
+                                <label for="prayer-notification-toggle">تفعيل إشعارات الصلاة</label>
+                            </div>
+                            <div class="notification-settings">
+                                <input type="checkbox" id="athan-sound-toggle" checked>
+                                <label for="athan-sound-toggle">تشغيل صوت الأذان</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="athan-container">
+                    <h3 class="athan-title">
+                        <i class="fas fa-mosque"></i> أذان الحرم المكي
+                    </h3>
+                    <div class="athan-player">
+                        <audio id="athanAudio" controls>
+                            <source src="019--1.mp3" type="audio/mpeg">
+                            متصفحك لا يدعم تشغيل الصوتيات
+                        </audio>
+                    </div>
+                    <div style="margin-top: 25px; font-size: 1.2rem; line-height: 1.7;">
+                        <p>"يَا أَيُّهَا الَّذِينَ آمَنُوا إِذَا نُودِيَ لِلصَّلَاةِ مِن يَوْمِ الْجُمُعَةِ فَاسْعَوْا إِلَىٰ ذِكْرِ اللَّهِ"</p>
+                        <p>(الجمعة: 9)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- قسم الأذكار الموسع -->
+        <div id="azkar" class="content-section">
+            <h2 class="section-title">
+<!-- ✅ عرض التاريخ الميلادي والهجري -->
+
+
+                <i class="fas fa-praying-hands"></i> أذكار المسلم الشاملة
+            </h2>
+            
+            <div class="azkar-tabs">
+                <div class="azkar-tab active" data-azkar="morning">أذكار الصباح</div>
+                <div class="azkar-tab" data-azkar="evening">أذكار المساء</div>
+                <div class="azkar-tab" data-azkar="sleep">أذكار النوم</div>
+                <div class="azkar-tab" data-azkar="prayer">أذكار بعد الصلاة</div>
+                <div class="azkar-tab" data-azkar="waking">أذكار الاستيقاظ</div>
+                <div class="azkar-tab" data-azkar="food">أذكار الطعام</div>
+                <div class="azkar-tab" data-azkar="travel">أذكار السفر</div>
+            </div>
+            
+            <div class="azkar-content">
+                <div class="azkar-list active" id="morning-azkar">
+                    <!-- آية الكرسي -->
+                    <div class="zekr">
+                        <div class="zekr-content">
+                            اللّهُ لاَ إِلَـهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلاَّ بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلاَ يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلاَّ بِمَا شَاء وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالأَرْضَ وَلاَ يَؤُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ
+                        </div>
+                        <div class="zekr-reference">(آية الكرسي - البقرة: 255)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <!-- سورة الإخلاص -->
+                    <div class="zekr">
+                        <div class="zekr-content">
+                            قُلْ هُوَ اللَّهُ أَحَدٌ، اللَّهُ الصَّمَدُ، لَمْ يَلِدْ وَلَمْ يُولَدْ، وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ
+                        </div>
+                        <div class="zekr-reference">(سورة الإخلاص - 3 مرات)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <!-- سورة الفلق -->
+                    <div class="zekr">
+                        <div class="zekr-content">
+                            قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ، مِن شَرِّ مَا خَلَقَ، وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ، وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ، وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ
+                        </div>
+                        <div class="zekr-reference">(سورة الفلق - 3 مرات)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <!-- سورة الناس -->
+                    <div class="zekr">
+                        <div class="zekr-content">
+                            قُلْ أَعُوذُ بِرَبِّ النَّاسِ، مَلِكِ النَّاسِ، إِلَهِ النَّاسِ، مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ، الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ، مِنَ الْجِنَّةِ وَ النَّاسِ
+                        </div>
+                        <div class="zekr-reference">(سورة الناس - 3 مرات)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <!-- أذكار الصباح الأساسية -->
+                    <div class="zekr">
+                        <div class="zekr-content">أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.</div>
+                        <div class="zekr-reference">(مرة واحدة)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ النُّشُورُ.</div>
+                        <div class="zekr-reference">(مرة واحدة)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">سُبْحَانَ اللَّهِ وَبِحَمْدِهِ: عَدَدَ خَلْقِهِ، وَرِضَا نَفْسِهِ، وَزِنَةَ عَرْشِهِ، وَمِدَادَ كَلِمَاتِهِ.</div>
+                        <div class="zekr-reference">(ثلاث مرات)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">اللَّهُمَّ إِنِّي أَصْبَحْتُ أُشْهِدُكَ وَأُشْهِدُ حَمَلَةَ عَرْشِكَ، وَمَلَائِكَتَكَ وَجَمِيعَ خَلْقِكَ، أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إِلَّا أَنْتَ وَحْدَكَ لَا شَرِيكَ لَكَ، وَأَنَّ مُحَمَّدًا عَبْدُكَ وَرَسُولُكَ.</div>
+                        <div class="zekr-reference">(4 مرات)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">اللَّهُمَّ مَا أَصْبَحَ بِي مِنْ نِعْمَةٍ أَوْ بِأَحَدٍ مِنْ خَلْقِكَ فَمِنْكَ وَحْدَكَ لَا شَرِيكَ لَكَ، فَلَكَ الْحَمْدُ وَلَكَ الشُّكْرُ.</div>
+                        <div class="zekr-reference">(مرة واحدة)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ.</div>
+                        <div class="zekr-reference">(7 مرات)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ، وَالْعَجْزِ وَالْكَسَلِ، وَالْبُخْلِ وَالْجُبْنِ، وَضَلَعِ الدَّيْنِ وَغَلَبَةِ الرِّجَالِ.</div>
+                        <div class="zekr-reference">(مرة واحدة)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ.</div>
+                        <div class="zekr-reference">(3 مرات)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ.</div>
+                        <div class="zekr-reference">(3 مرات)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">رَضِيتُ بِاللَّهِ رَبًّا، وَبِالْإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ نَبِيًّا.</div>
+                        <div class="zekr-reference">(3 مرات)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ أَصْلِحْ لِي شَأْنِي كُلَّهُ وَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ.</div>
+                        <div class="zekr-reference">(3 مرات)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">سُبْحَانَ اللَّهِ وَبِحَمْدِهِ.</div>
+                        <div class="zekr-reference">(100 مرة)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.</div>
+                        <div class="zekr-reference">(10 مرات)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ.</div>
+                        <div class="zekr-reference">(10 مرات)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- أذكار المساء -->
+                <div class="azkar-list" id="evening-azkar">
+                    <!-- آية الكرسي -->
+                    <div class="zekr">
+                        <div class="zekr-content">
+                            اللّهُ لاَ إِلَـهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلاَّ بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلاَ يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلاَّ بِمَا شَاء وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالأَرْضَ وَلاَ يَؤُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ
+                        </div>
+                        <div class="zekr-reference">(آية الكرسي - البقرة: 255)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <!-- سورة الإخلاص -->
+                    <div class="zekr">
+                        <div class="zekr-content">
+                            قُلْ هُوَ اللَّهُ أَحَدٌ، اللَّهُ الصَّمَدُ، لَمْ يَلِدْ وَلَمْ يُولَدْ، وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ
+                        </div>
+                        <div class="zekr-reference">(سورة الإخلاص - 3 مرات)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <!-- سورة الفلق -->
+                    <div class="zekr">
+                        <div class="zekr-content">
+                            قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ، مِن شَرِّ مَا خَلَقَ، وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ، وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ، وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ
+                        </div>
+                        <div class="zekr-reference">(سورة الفلق - 3 مرات)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <!-- سورة الناس -->
+                    <div class="zekr">
+                        <div class="zekr-content">
+                            قُلْ أَعُوذُ بِرَبِّ النَّاسِ، مَلِكِ النَّاسِ، إِلَهِ النَّاسِ، مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ، الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ، مِنَ الْجِنَّةِ وَ النَّاسِ
+                        </div>
+                        <div class="zekr-reference">(سورة الناس - 3 مرات)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <!-- أذكار المساء الأساسية -->
+                    <div class="zekr">
+                        <div class="zekr-content">أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.</div>
+                        <div class="zekr-reference">(مرة واحدة)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ النُّشُورُ.</div>
+                        <div class="zekr-reference">(مرة واحدة)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">سُبْحَانَ اللَّهِ وَبِحَمْدِهِ: عَدَدَ خَلْقِهِ، وَرِضَا نَفْسِهِ، وَزِنَةَ عَرْشِهِ، وَمِدَادَ كَلِمَاتِهِ.</div>
+                        <div class="zekr-reference">(ثلاث مرات)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">اللَّهُمَّ إِنِّي أَمْسَيْتُ أُشْهِدُكَ وَأُشْهِدُ حَمَلَةَ عَرْشِكَ، وَمَلَائِكَتَكَ وَجَمِيعَ خَلْقِكَ، أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إِلَّا أَنْتَ وَحْدَكَ لَا شَرِيكَ لَكَ، وَأَنَّ مُحَمَّدًا عَبْدُكَ وَرَسُولُكَ.</div>
+                        <div class="zekr-reference">(4 مرات)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">اللَّهُمَّ مَا أَمْسَى بِي مِنْ نِعْمَةٍ أَوْ بِأَحَدٍ مِنْ خَلْقِكَ فَمِنْكَ وَحْدَكَ لَا شَرِيكَ لَكَ، فَلَكَ الْحَمْدُ وَلَكَ الشُّكْرُ.</div>
+                        <div class="zekr-reference">(مرة واحدة)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ.</div>
+                        <div class="zekr-reference">(7 مرات)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ، وَالْعَجْزِ وَالْكَسَلِ، وَالْبُخْلِ وَالْجُبْنِ، وَضَلَعِ الدَّيْنِ وَغَلَبَةِ الرِّجَالِ.</div>
+                        <div class="zekr-reference">(مرة واحدة)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ.</div>
+                        <div class="zekr-reference">(3 مرات)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ.</div>
+                        <div class="zekr-reference">(3 مرات)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">رَضِيتُ بِاللَّهِ رَبًّا، وَبِالْإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ نَبِيًّا.</div>
+                        <div class="zekr-reference">(3 مرات)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ أَصْلِحْ لِي شَأْنِي كُلَّهُ وَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ.</div>
+                        <div class="zekr-reference">(3 مرات)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">سُبْحَانَ اللَّهِ وَبِحَمْدِهِ.</div>
+                        <div class="zekr-reference">(100 مرة)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.</div>
+                        <div class="zekr-reference">(10 مرات)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ.</div>
+                        <div class="zekr-reference">(10 مرات)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- أذكار النوم -->
+                <div class="azkar-list" id="sleep-azkar">
+                    <!-- سورة الملك كاملة -->
+                    <div class="zekr">
+                        <div class="zekr-content">
+                            بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ<br><br>
+                            تَبَارَكَ الَّذِي بِيَدِهِ الْمُلْكُ وَهُوَ عَلَىٰ كُلِّ شَيْءٍ قَدِيرٌ ﴿1﴾<br>
+                            الَّذِي خَلَقَ الْمَوْتَ وَالْحَيَاةَ لِيَبْلُوَكُمْ أَيُّكُمْ أَحْسَنُ عَمَلًا ۚ وَهُوَ الْعَزِيزُ الْغَفُورُ ﴿2﴾<br>
+                            الَّذِي خَلَقَ سَبْعَ سَمَاوَاتٍ طِبَاقًا ۖ مَّا تَرَىٰ فِي خَلْقِ الرَّحْمَٰنِ مِن تَفَاوُتٍ ۖ فَارْجِعِ الْبَصَرَ هَلْ تَرَىٰ مِن فُطُورٍ ﴿3﴾<br>
+                            ثُمَّ ارْجِعِ الْبَصَرَ كَرَّتَيْنِ يَنقَلِبْ إِلَيْكَ الْبَصَرُ خَاسِئًا وَهُوَ حَسِيرٌ ﴿4﴾<br>
+                            وَلَقَدْ زَيَّنَّا السَّمَاءَ الدُّنْيَا بِمَصَابِيحَ وَجَعَلْنَاهَا رُجُومًا لِّلْشَّيَاطِينِ ۖ وَأَعْتَدْنَا لَهُمْ عَذَابَ السَّعِيرِ ﴿5﴾<br>
+                            وَلِلَّذِينَ كَفَرُوا بِرَبِّهِمْ عَذَابُ جَهَنَّمَ ۖ وَبِئْسَ الْمَصِيرُ ﴿6﴾<br>
+                            إِذَا أُلْقُوا فِيهَا سَمِعُوا لَهَا شَهِيقًا وَهِيَ تَفُورُ ﴿7﴾<br>
+                            تَكَادُ تَمَيَّزُ مِنَ الْغَيْظِ ۖ كُلَّمَا أُلْقِيَ فِيهَا فَوْجٌ سَأَلَهُمْ خَزَنَتُهَا أَلَمْ يَأْتِكُمْ نَذِيرٌ ﴿8﴾<br>
+                            قَالُوا بَلَىٰ قَدْ جَاءَنَا نَذِيرٌ فَكَذَّبْنَا وَقُلْنَا مَا نَزَّلَ اللَّهُ مِن شَيْءٍ إِنْ أَنتُمْ إِلَّا فِي ضَلَالٍ كَبِيرٍ ﴿9﴾<br>
+                            وَقَالُوا لَوْ كُنَّا نَسْمَعُ أَوْ نَعْقِلُ مَا كُنَّا فِي أَصْحَابِ السَّعِيرِ ﴿10﴾<br>
+                            فَاعْتَرَفُوا بِذَنبِهِمْ فَسُحْقًا لِّأَصْحَابِ السَّعِيرِ ﴿11﴾<br>
+                            إِنَّ الَّذِينَ يَخْشَوْنَ رَبَّهُم بِالْغَيْبِ لَهُم مَّغْفِرَةٌ وَأَجْرٌ كَبِيرٌ ﴿12﴾<br>
+                            وَأَسِرُّوا قَوْلَكُمْ أَوِ اجْهَرُوا بِهِ ۖ إِنَّهُ عَلِيمٌ بِذَاتِ الصُّدُورِ ﴿13﴾<br>
+                            أَلَا يَعْلَمُ مَنْ خَلَقَ وَهُوَ اللَّطِيفُ الْخَبِيرُ ﴿14﴾<br>
+                            هُوَ الَّذِي جَعَلَ لَكُمُ الْأَرْضَ ذَلُولًا فَامْشُوا فِي مَنَاكِبِهَا وَكُلُوا مِن رِّزْقِهِ ۖ وَإِلَيْهِ النُّشُورُ ﴿15﴾<br>
+                            أَأَمِنتُم مَّن فِي السَّمَاءِ أَن يَخْسِفَ بِكُمُ الْأَرْضَ فَإِذَا هِيَ تَمُورُ ﴿16﴾<br>
+                            أَمْ أَمِنتُم مَّن فِي السَّمَاءِ أَن يُرْسِلَ عَلَيْكُمْ حَاصِبًا ۖ فَسَتَعْلَمُونَ كَيْفَ نَذِيرِ ﴿17﴾<br>
+                            وَلَقَدْ كَذَّبَ الَّذِينَ مِن قَبْلِهِمْ فَكَيْفَ كَانَ نَكِيرِ ﴿18﴾<br>
+                            أَوَلَمْ يَرَوْا إِلَى الطَّيْرِ فَوْقَهُمْ صَافَّاتٍ وَيَقْبِضْنَ ۚ مَا يُمْسِكُهُنَّ إِلَّا الرَّحْمَٰنُ ۚ إِنَّهُ بِكُلِّ شَيْءٍ بَصِيرٌ ﴿19﴾<br>
+                            أَمَّنْ هَٰذَا الَّذِي هُوَ جُندٌ لَّكُمْ يَنصُرُكُم مِّن دُونِ الرَّحْمَٰنِ ۚ إِنِ الْكَافِرُونَ إِلَّا فِي غُرُورٍ ﴿20﴾<br>
+                            أَمَّنْ هَٰذَا الَّذِي يَرْزُقُكُمْ إِنْ أَمْسَكَ رِزْقَهُ ۚ بَل لَّجُّوا فِي عُتُوٍّ وَنُفُورٍ ﴿21﴾<br>
+                            أَفَمَن يَمْشِي مُكِبًّا عَلَىٰ وَجْهِهِ أَهْدَىٰ أَمَّن يَمْشِي سَوِيًّا عَلَىٰ صِرَاطٍ مُّسْتَقِيمٍ ﴿22﴾<br>
+                            قُلْ هُوَ الَّذِي أَنشَأَكُمْ وَجَعَلَ لَكُمُ السَّمْعَ وَالْأَبْصَارَ وَالْأَفْئِدَةَ ۖ قَلِيلًا مَّا تَشْكُرُونَ ﴿23﴾<br>
+                            قُلْ هُوَ الَّذِي ذَرَأَكُمْ فِي الْأَرْضِ وَإِلَيْهِ تُحْشَرُونَ ﴿24﴾<br>
+                            وَيَقُولُونَ مَتَىٰ هَٰذَا الْوَعْدُ إِن كُنتُمْ صَادِقِينَ ﴿25﴾<br>
+                            قُلْ إِنَّمَا الْعِلْمُ عِندَ اللَّهِ وَإِنَّمَا أَنَا نَذِيرٌ مُّبِينٌ ﴿26﴾<br>
+                            فَلَمَّا رَأَوْهُ زُلْفَةً سِيئَتْ وُجُوهُ الَّذِينَ كَفَرُوا وَقِيلَ هَٰذَا الَّذِي كُنتُم بِهِ تَدَّعُونَ ﴿27﴾<br>
+                            قُلْ أَرَأَيْتُمْ إِنْ أَهْلَكَنِيَ اللَّهُ وَمَن مَّعِيَ أَوْ رَحِمَنَا فَمَن يُجِيرُ الْكَافِرِينَ مِنْ عَذَابٍ أَلِيمٍ ﴿28﴾<br>
+                            قُلْ هُوَ الرَّحْمَٰنُ آمَنَّا بِهِ وَعَلَيْهِ تَوَكَّلْنَا ۖ فَسَتَعْلَمُونَ مَنْ هُوَ فِي ضَلَالٍ مُّبِينٍ ﴿29﴾<br>
+                            قُلْ أَرَأَيْتُمْ إِنْ أَصْبَحَ مَاؤُكُمْ غَوْرًا فَمَن يَأْتِيكُم بِمَاءٍ مَّعِينٍ ﴿30﴾
+                        </div>
+                        <div class="zekr-reference">(سورة الملك كاملة)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <!-- آية الكرسي -->
+                    <div class="zekr">
+                        <div class="zekr-content">
+                            اللّهُ لاَ إِلَـهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلاَّ بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلاَ يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلاَّ بِمَا شَاء وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالأَرْضَ وَلاَ يَؤُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ
+                        </div>
+                        <div class="zekr-reference">(آية الكرسي - البقرة: 255)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <!-- سورة الإخلاص -->
+                    <div class="zekr">
+                        <div class="zekr-content">
+                            قُلْ هُوَ اللَّهُ أَحَدٌ، اللَّهُ الصَّمَدُ، لَمْ يَلِدْ وَلَمْ يُولَدْ، وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ
+                        </div>
+                        <div class="zekr-reference">(سورة الإخلاص - 3 مرات)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <!-- سورة الفلق -->
+                    <div class="zekr">
+                        <div class="zekr-content">
+                            قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ، مِن شَرِّ مَا خَلَقَ، وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ، وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ، وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ
+                        </div>
+                        <div class="zekr-reference">(سورة الفلق - 3 مرات)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <!-- سورة الناس -->
+                    <div class="zekr">
+                        <div class="zekr-content">
+                            قُلْ أَعُوذُ بِرَبِّ النَّاسِ، مَلِكِ النَّاسِ، إِلَهِ النَّاسِ، مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ، الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ، مِنَ الْجِنَّةِ وَ النَّاسِ
+                        </div>
+                        <div class="zekr-reference">(سورة الناس - 3 مرات)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <!-- أذكار النوم الأساسية -->
+                    <div class="zekr">
+                        <div class="zekr-content">بِاسْمِكَ رَبِّـي وَضَعْـتُ جَنْـبي ، وَبِكَ أَرْفَعُـه، فَإِنْ أَمْسَـكْتَ نَفْسـي فارْحَـمْها ، وَإِنْ أَرْسَلْتَـها فاحْفَظْـها بِمـا تَحْفَـظُ بِه عِبـادَكَ الصّـالِحـين.</div>
+                        <div class="zekr-reference">(مرة واحدة)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">اللَّهُمَّ قِنِي عَذَابَكَ يَوْمَ تَبْعَثُ عِبَادَكَ.</div>
+                        <div class="zekr-reference">(3 مرات)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">اللَّهُمَّ أَسْلَمْتُ نَفْسِي إِلَيْكَ، وَفَوَّضْتُ أَمْرِي إِلَيْكَ، وَوَجَّهْتُ وَجْهِي إِلَيْكَ، وَأَلْجَأْتُ ظَهْرِي إِلَيْكَ، رَغْبَةً وَرَهْبَةً إِلَيْكَ، لاَ مَلْجَأَ وَلاَ مَنْجَا مِنْكَ إِلاَّ إِلَيْكَ، آمَنْتُ بِكِتَابِكَ الَّذِي أَنْزَلْتَ، وَبِنَبِيِّكَ الَّذِي أَرْسَلْتَ.</div>
+                        <div class="zekr-reference">(مرة واحدة)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">سُبْحَانَ اللَّهِ (33 مرة)، الْحَمْدُ لِلَّهِ (33 مرة)، اللَّهُ أَكْبَرُ (34 مرة).</div>
+                        <div class="zekr-reference">(مجموعها 100 مرة)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">اللَّهُمَّ رَبَّ السَّمَوَاتِ وَرَبَّ الأَرْضِ وَرَبَّ الْعَرْشِ الْعَظِيمِ، رَبَّنَا وَرَبَّ كُلِّ شَيْءٍ، فَالِقَ الْحَبِّ وَالنَّوَى، وَمُنْزِلَ التَّوْرَاةِ وَالإِنْجِيلِ وَالْفُرْقَانِ، أَعُوذُ بِكَ مِنْ شَرِّ كُلِّ شَيْءٍ أَنْتَ آخِذٌ بِنَاصِيَتِهِ، اللَّهُمَّ أَنْتَ الأَوَّلُ فَلَيْسَ قَبْلَكَ شَيْءٌ، وَأَنْتَ الآخِرُ فَلَيْسَ بَعْدَكَ شَيْءٌ، وَأَنْتَ الظَّاهِرُ فَلَيْسَ فَوْقَكَ شَيْءٌ، وَأَنْتَ الْبَاطِنُ فَلَيْسَ دُونَكَ شَيْءٌ، اقْضِ عَنَّا الدَّيْنَ وَأَغْنِنَا مِنَ الْفَقْرِ.</div>
+                        <div class="zekr-reference">(مرة واحدة)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- أذكار بعد الصلاة -->
+                <div class="azkar-list" id="prayer-azkar">
+                    <div class="zekr">
+                        <div class="zekr-content">أَسْتَغْفِرُ اللَّهَ (3 مرات) اللَّهُمَّ أَنْتَ السَّلامُ وَمِنْكَ السَّلامُ تَبَارَكْتَ يَا ذَا الْجَلالِ وَالإكْرَامِ.</div>
+                        <div class="zekr-reference">(مرة واحدة)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.</div>
+                        <div class="zekr-reference">(10 مرات بعد صلاة الفجر والمغرب)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">اللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ.</div>
+                        <div class="zekr-reference">(مرة واحدة)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">سُبْحَانَ اللَّهِ (33 مرة)، الْحَمْدُ لِلَّهِ (33 مرة)، اللَّهُ أَكْبَرُ (33 مرة).</div>
+                        <div class="zekr-reference">(بعد كل صلاة)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.</div>
+                        <div class="zekr-reference">(10 مرات)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">آيَةُ الْكُرْسِيِّ: اللّهُ لاَ إِلَـهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلاَّ بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلاَ يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلاَّ بِمَا شَاء وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالأَرْضَ وَلاَ يَؤُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ</div>
+                        <div class="zekr-reference">(مرة واحدة بعد كل صلاة)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْكُفْرِ وَالْفَقْرِ وَمِنْ عَذَابِ الْقَبْرِ، لاَ إِلَهَ إِلاَّ أَنْتَ.</div>
+                        <div class="zekr-reference">(3 مرات بعد صلاة المغرب والفجر)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">اللَّهُمَّ أَنْتَ رَبِّي لاَ إِلَهَ إِلاَّ أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لاَ يَغْفِرُ الذُّنُوبَ إِلاَّ أَنْتَ.</div>
+                        <div class="zekr-reference">(مرة واحدة بعد الصلوات)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">اللَّهُمَّ لاَ مَانِعَ لِمَا أَعْطَيْتَ، وَلاَ مُعْطِيَ لِمَا مَنَعْتَ، وَلاَ يَنْفَعُ ذَا الْجَدِّ مِنْكَ الْجَدُّ.</div>
+                        <div class="zekr-reference">(بعد صلاة الفجر)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- أذكار الاستيقاظ -->
+                <div class="azkar-list" id="waking-azkar">
+                    <div class="zekr">
+                        <div class="zekr-content">الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ.</div>
+                        <div class="zekr-reference">(مرة واحدة)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، سُبْحَانَ اللَّهِ، وَالْحَمْدُ لِلَّهِ، وَلاَ إِلَهَ إِلاَّ اللَّهُ، وَاللَّهُ أَكْبَرُ، وَلاَ حَوْلَ وَلاَ قُوَّةَ إِلاَّ بِاللَّهِ الْعَلِيِّ الْعَظِيمِ، رَبِّ اغْفِرْ لِي.</div>
+                        <div class="zekr-reference">(مرة واحدة)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- أذكار الطعام -->
+                <div class="azkar-list" id="food-azkar">
+                    <div class="zekr">
+                        <div class="zekr-content">بِسْمِ اللَّهِ.</div>
+                        <div class="zekr-reference">(في أول الطعام)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">بِسْمِ اللَّهِ فِي أَوَّلِهِ وَآخِرِهِ.</div>
+                        <div class="zekr-reference">(إذا نسيت التسمية في الأول)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنَا وَسَقَانَا وَجَعَلَنَا مُسْلِمِينَ.</div>
+                        <div class="zekr-reference">(بعد الانتهاء من الطعام)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">الْحَمْدُ لِلَّهِ حَمْدًا كَثِيرًا طَيِّبًا مُبَارَكًا فِيهِ، غَيْرَ مَكْفِيٍّ وَلاَ مُوَدَّعٍ وَلاَ مُسْتَغْنًى عَنْهُ رَبَّنَا.</div>
+                        <div class="zekr-reference">(بعد الانتهاء من الطعام)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- أذكار السفر -->
+                <div class="azkar-list" id="travel-azkar">
+                    <div class="zekr">
+                        <div class="zekr-content">سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ، وَإِنَّا إِلَى رَبِّنَا لَمُنْقَلِبُونَ.</div>
+                        <div class="zekr-reference">(عند الركوب)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">اللَّهُ أَكْبَرُ، اللَّهُ أَكْبَرُ، اللَّهُ أَكْبَرُ، سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ، وَإِنَّا إِلَى رَبِّنَا لَمُنْقَلِبُونَ، اللَّهُمَّ إِنَّا نَسْأَلُكَ فِي سَفَرِنَا هَذَا الْبِرَّ وَالتَّقْوَى، وَمِنَ الْعَمَلِ مَا تَرْضَى، اللَّهُمَّ هَوِّنْ عَلَيْنَا سَفَرَنَا هَذَا، وَاطْوِ عَنَّا بُعْدَهُ، اللَّهُمَّ أَنْتَ الصَّاحِبُ فِي السَّفَرِ، وَالْخَلِيفَةُ فِي الأَهْلِ، اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ وَعْثَاءِ السَّفَرِ، وَكَآبَةِ الْمَنْظَرِ، وَسُوءِ الْمُنْقَلَبِ فِي الْمَالِ وَالأَهْلِ.</div>
+                        <div class="zekr-reference">(عند الركوب)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">آيَةُ الْكُرْسِيِّ: اللّهُ لاَ إِلَـهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلاَّ بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلاَ يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلاَّ بِمَا شَاء وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالأَرْضَ وَلاَ يَؤُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ</div>
+                        <div class="zekr-reference">(عند النزول في مكان)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ.</div>
+                        <div class="zekr-reference">(3 مرات عند النزول في مكان جديد)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="zekr">
+                        <div class="zekr-content">اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ وَعْثَاءِ السَّفَرِ، وَكَآبَةِ الْمَنْظَرِ، وَسُوءِ الْمُنْقَلَبِ فِي الْمَالِ وَالأَهْلِ.</div>
+                        <div class="zekr-reference">(عند السفر)</div>
+                        <div class="count-control">
+                            <button class="count-btn" onclick="decrementCount(this)">-</button>
+                            <div class="count-display">0</div>
+                            <button class="count-btn" onclick="incrementCount(this)">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- قسم حفظ القرآن -->
+        <!-- قسم حفظ القرآن -->
+<div id="quran" class="content-section">
+    <h2 class="section-title">
+
+
+        <i class="fas fa-quran"></i> حفظ القرآن الكريم
+    </h2>
+    
+    <div class="quran-guide">
+        <!-- مقدمة عن فضل حفظ القرآن -->
+        <div class="guide-card">
+            <h3><i class="fas fa-star"></i> فضل حفظ القرآن الكريم</h3>
+            <p>قال رسول الله ﷺ: "يقال لصاحب القرآن: اقرأ وارتقِ ورتل كما كنت ترتل في الدنيا، فإن منزلتك عند آخر آية تقرؤها". (رواه الترمذي)</p>
+            <p>حافظ القرآن يرفعه الله به درجات في الجنة، ويكون شفيعاً له يوم القيامة، ويُلبس والداه تاج الوقار يوم القيامة.</p>
+        </div>
+        
+        <!-- نصائح للحفظ -->
+        <div class="guide-card">
+            <h3><i class="fas fa-lightbulb"></i> نصائح أساسية للحفظ</h3>
+            <ul>
+                <li>ابدأ بحفظ السور القصيرة من جزء عم ثم تدرج للأطول</li>
+                <li>خصص وقتاً ثابتاً يومياً للحفظ (يفضل بعد الفجر)</li>
+                <li>استخدم مصحفاً واحداً لتثبيت الصفحات في ذهنك</li>
+                <li>احرص على فهم معاني الآيات قبل الحفظ</li>
+                <li>استمع لتلاوة الشيخ المفضل لديك للآيات التي تحفظها</li>
+                <li>استعن بالله وتوكل عليه في كل خطوة</li>
+            </ul>
+        </div>
+        
+        <!-- طرق فعالة للحفظ -->
+        <div class="guide-card">
+            <h3><i class="fas fa-road"></i> طرق فعالة لحفظ القرآن</h3>
+            <div class="method">
+                <h4><i class="fas fa-repeat"></i> طريقة التكرار</h4>
+                <p>اقرأ الآية الأولى 10 مرات، ثم الثانية 10 مرات، ثم اجمعهما معاً 10 مرات. كرر هذه الطريقة حتى نهاية الصفحة.</p>
+            </div>
+            <div class="method">
+                <h4><i class="fas fa-microphone-alt"></i> طريقة التسميع</h4>
+                <p>اقرأ الآية عدة مرات، ثم غط المصحف وحاول تسميعها. إذا أخطأت، أعد القراءة والتسميع حتى تتقنها.</p>
+            </div>
+            <div class="method">
+                <h4><i class="fas fa-pen"></i> طريقة الكتابة</h4>
+                <p>اكتب الآيات التي تحفظها على الورق، فالكتابة تساعد على تثبيت الحفظ وتقوية الذاكرة البصرية.</p>
+            </div>
+        </div>
+        
+        <!-- خطوات عملية -->
+        <div class="guide-card">
+            <h3><i class="fas fa-footsteps"></i> خطوات عملية للحفظ اليومي</h3>
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>الوضوء وطلب العون من الله</h4>
+                    <p>ابدأ بالوضوء ثم صل ركعتين، وادع الله أن يعينك على الحفظ والفهم.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4>المراجعة السريعة</h4>
+                    <p>راجع ما حفظته في اليوم السابق لمدة 10 دقائق قبل البدء بالحفظ الجديد.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h4>الحفظ الجديد</h4>
+                    <p>احفظ نصف صفحة إلى صفحة جديدة حسب قدرتك، باستخدام إحدى الطرق المذكورة.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h4>التسميع والمراجعة</h4>
+                    <p>سمّع ما حفظته اليوم كاملاً، ثم أضفه إلى ما سبقه من الحفظ.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- فوائد المراجعة -->
+        <div class="guide-card">
+            <h3><i class="fas fa-sync-alt"></i> أهمية المراجعة المستمرة</h3>
+            <p>قال رسول الله ﷺ: "تعاهدوا القرآن فوالذي نفسي بيده لهو أشد تفلتاً من الإبل في عقلها". (رواه البخاري)</p>
+            <ul>
+                <li>خصص وقتاً يومياً لمراجعة الحفظ القديم</li>
+                <li>استخدم نظام المراجعة المتراكبة (مراجعة الأسبوع الماضي + الشهر الماضي)</li>
+                <li>اجعل لك ورداً ثابتاً للقراءة اليومية في الصلاة والنوافل</li>
+                <li>استمع للقرآن أثناء التنقل أو القيام بالأعمال المنزلية</li>
+            </ul>
+        </div>
+        
+        <!-- دعاء الحفظ -->
+        <div class="guide-card dua-card">
+            <h3><i class="fas fa-hands-praying"></i> أدعية للحفظ والفهم</h3>
+            <div class="dua">
+                <p>"رَبِّ زِدْنِي عِلْمًا"</p>
+                <p>(طه: 114)</p>
+            </div>
+            <div class="dua">
+                <p>"اللهم إني أسألك فهم النبيين، وحفظ المرسلين، والملائكة المقربين"</p>
+                <p>(رواه الترمذي)</p>
+            </div>
+            <div class="dua">
+                <p>"اللهم علمنا ما ينفعنا، وانفعنا بما علمتنا، وزدنا علماً"</p>
+            </div>
+        </div>
+    </div>
+</div>
+        <!-- قسم الحديث الشريف (يتم تحديثه تلقائياً) -->
+        <!-- قسم الحديث الشريف -->
+<div id="hadith" class="content-section">
+    <h2 class="section-title">
+
+
+        <i class="fas fa-book"></i> الحديث اليومي مع التفسير
+    </h2>
+    
+    <div class="hadith-card">
+        <div class="hadith-text" id="hadithText">
+            مَنْ كَانَ يُؤْمِنُ بِاللَّهِ وَالْيَوْمِ الْآخِرِ فَلْيَقُلْ خَيْرًا أَوْ لِيَصْمُتْ
+        </div>
+        <div class="hadith-reference" id="hadithReference">
+            رواه البخاري ومسلم
+        </div>
+        
+        <div class="hadith-explanation">
+            <h4><i class="fas fa-lightbulb"></i> شرح الحديث</h4>
+            <div id="hadithExplanation">
+                هذا الحديث العظيم من جوامع الكلم التي أوتيها النبي صلى الله عليه وسلم، وهو أصل عظيم في أدب اللسان. 
+                والمعنى: أن من كان يؤمن بالله واليوم الآخر إيمانًا صادقًا يثمر العمل الصالح، فليحفظ لسانه ولا يتكلم إلا بخير، 
+                وإلا فليصمت. وهذا يشمل جميع أنواع الكلام، فيجب على المسلم أن يفكر قبل أن يتكلم، فإن كان الكلام خيرًا 
+                وله فائدة تكلم به، وإن كان غير ذلك فالسكوت أولى.
+                
+                <br><br>
+                ومن فوائد الحديث:
+                <ul>
+                    <li>الحث على حفظ اللسان من كل ما لا خير فيه</li>
+                    <li>التحذير من فضول الكلام الذي لا فائدة منه</li>
+                    <li>ربط الإيمان بالسلوك العملي في الحياة</li>
+                    <li>أن الصمت أحيانًا يكون من الإيمان</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="hadith-navigation">
+            <button class="btn" onclick="showPreviousHadith()">
+                <i class="fas fa-arrow-left"></i> الحديث السابق
+            </button>
+            <button class="btn" onclick="showNextHadith()">
+                الحديث التالي <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+    
+    <div style="background: var(--off-white); border-radius: 20px; padding: 25px; margin-top: 30px;">
+        <h3 style="color: var(--dark-gold); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+            <i class="fas fa-info-circle"></i> أهمية دراسة الحديث النبوي
+        </h3>
+        <p style="font-size: 1.2rem; line-height: 1.8;">
+            قال رسول الله صلى الله عليه وسلم: "تركت فيكم ما إن تمسكتم به لن تضلوا بعدي أبداً: كتاب الله وسنتي". 
+            دراسة الحديث النبوي وفهمه من أعظم ما يقوي إيمان المسلم ويصحح عبادته ومعاملاته. 
+            والحديث النبوي هو المصدر الثاني للتشريع بعد القرآن الكريم، وهو تفسير وبيان للقرآن.
+        </p>
+    </div>
+</div>
+        
+        <!-- قسم نصائح للمقبلين على الزواج -->
+        <div id="marriage" class="content-section">
+            <h2 class="section-title">
+<!-- ✅ عرض التاريخ الميلادي والهجري -->
+
+
+                <i class="fas fa-ring"></i> نصائح للمقبلين على الزواج والمتزوجين
+            </h2>
+            
+            <div class="tips-container">
+                <div class="tip-card">
+                    <h3><i class="fas fa-heart"></i> أساس اختيار الشريك</h3>
+                    <p>قال رسول الله صلى الله عليه وسلم: "تُنْكَحُ الْمَرْأَةُ لِأَرْبَعٍ: لِمَالِهَا، وَلِحَسَبِهَا، وَجَمَالِهَا، وَلِدِينِهَا، فَاظْفَرْ بِذَاتِ الدِّينِ تَرِبَتْ يَدَاكَ". (رواه البخاري ومسلم)</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-hand-holding-heart"></i> حسن المعاشرة</h3>
+                    <p>"وَعَاشِرُوهُنَّ بِالْمَعْرُوفِ" (النساء:19). من أهم أسرار نجاح الزواج حسن المعاشرة والتسامح والتفاهم بين الزوجين.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-balance-scale"></i> حقوق الزوجين</h3>
+                    <p>للزوجة على زوجها النفقة وحسن المعاملة، وللزوج على زوجته الطاعة في المعروف وحفظ بيته وأسراره.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-pray"></i> أهمية الدعاء</h3>
+                    <p>الدعاء من أهم وسائل تقوية العلاقة الزوجية: "رَبَّنَا هَبْ لَنَا مِنْ أَزْوَاجِنَا وَذُرِّيَّاتِنَا قُرَّةَ أَعْيُنٍ وَاجْعَلْنَا لِلْمُتَّقِينَ إِمَامًا" (الفرقان:74).</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-comments"></i> الحوار البناء</h3>
+                    <p>الحوار الهادئ والمباشر بين الزوجين من أهم عوامل استمرار الزواج ونجاحه، مع الابتعاد عن التجريح والكلمات الجارحة.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-handshake"></i> حل الخلافات</h3>
+                    <p>"وَإِنْ خِفْتُمْ شِقَاقَ بَيْنِهِمَا فَابْعَثُوا حَكَمًا مِنْ أَهْلِهِ وَحَكَمًا مِنْ أَهْلِهَا" (النساء:35). عند استعصاء الخلافات، اللجوء للحكمة والوساطة.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-gift"></i> الهدايا والمفاجآت</h3>
+                    <p>قال النبي صلى الله عليه وسلم: "تهادوا تحابوا". الهدايا ولو كانت بسيطة تزيد المودة وتجدد المشاعر بين الزوجين.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-lock"></i> حفظ الأسرار</h3>
+                    <p>من أهم واجبات الزوجين حفظ أسرار المنزل وعدم إفشائها للآخرين، فهذا من أساسيات الثقة بينهما.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-praying-hands"></i> الصلاة المشتركة</h3>
+                    <p>قيام الزوجين بصلاة الليل معاً من أعظم أسباب البركة والرحمة في البيت، كما كان يفعل النبي صلى الله عليه وسلم مع زوجاته.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-book-reader"></i> التعلم المشترك</h3>
+                    <p>تخصيص وقت لقراءة القرآن أو كتاب مفيد معاً يقوي الروابط الفكرية والروحية بين الزوجين.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-smile"></i> الضحك والمرح</h3>
+                    <p>قال النبي صلى الله عليه وسلم: "وتبسمك في وجه أخيك صدقة". الضحك المعتدل داخل الأسرة يزيل التوتر ويقوي العلاقات.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-user-clock"></i> الصبر والتأني</h3>
+                    <p>الصبر على أخطاء الشريك وعدم التسرع في الحكم من أهم أسباب استمرار الزواج الناجح.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- قسم تربية الأبناء -->
+        <div id="parenting" class="content-section">
+            <h2 class="section-title">
+
+                <i class="fas fa-child"></i> تربية الأبناء على تعاليم الدين
+            </h2>
+            
+            <div class="tips-container">
+                <div class="tip-card">
+                    <h3><i class="fas fa-star"></i> القدوة الحسنة</h3>
+                    <p>الأبناء يتعلمون من أفعالك أكثر مما يتعلمون من أقوالك، فكن قدوة حسنة لهم في الصلاة والأخلاق والمعاملة.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-book"></i> تعليم القرآن</h3>
+                    <p>قال رسول الله صلى الله عليه وسلم: "خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ" (رواه البخاري). ابدأ بتعليم أبنائك القرآن منذ الصغر.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-pray"></i> تعليم الصلاة</h3>
+                    <p>قال النبي صلى الله عليه وسلم: "مُرُوا أَوْلَادَكُمْ بِالصَّلَاةِ وَهُمْ أَبْنَاءُ سَبْعِ سِنِينَ، وَاضْرِبُوهُمْ عَلَيْهَا وَهُمْ أَبْنَاءُ عَشْرٍ" (رواه أبو داود).</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-balance-scale"></i> العدل بين الأبناء</h3>
+                    <p>قال رسول الله صلى الله عليه وسلم: "اتَّقُوا اللَّهَ وَاعْدِلُوا بَيْنَ أَوْلَادِكُمْ" (رواه البخاري ومسلم). العدل في المعاملة والعطاء يمنع الحسد والضغينة.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-heart"></i> التربية بالحب</h3>
+                    <p>التربية بالحب والحنان من أهم أسس التربية الناجحة. قال رسول الله صلى الله عليه وسلم: "مَنْ لَا يَرْحَمْ لَا يُرْحَمْ" (رواه البخاري).</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-graduation-cap"></i> التعليم المستمر</h3>
+                    <p>التعليم ليس مقصوراً على المدرسة، بل هو مسؤولية دائمة. علم أبناءك السيرة النبوية والأخلاق الإسلامية في حياتهم اليومية.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-hand-holding-heart"></i> التربية بالحكمة</h3>
+                    <p>"ادْعُ إِلَىٰ سَبِيلِ رَبِّكَ بِالْحِكْمَةِ وَالْمَوْعِظَةِ الْحَسَنَةِ" (النحل:125). استخدم الأساليب التربوية المناسبة لعمر الطفل وطبيعته.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-users"></i> الصحبة الصالحة</h3>
+                    <p>قال النبي صلى الله عليه وسلم: "الرجل على دين خليله، فلينظر أحدكم من يخالل". اختيار الأصدقاء الصالحين لأبنائك من أهم مسؤولياتك.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-microphone-alt"></i> الاستماع الجيد</h3>
+                    <p>الاستماع لمشاكل الأبناء وآرائهم باهتمام يعزز ثقتهم بأنفسهم ويرسخ التواصل المفتوح مع الوالدين.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-hands-helping"></i> المشاركة في الأعمال</h3>
+                    <p>إشراك الأبناء في أعمال المنزل والمسؤوليات ينمي لديهم روح التعاون والاعتماد على النفس.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-clock"></i> الوقت الخاص</h3>
+                    <p>تخصيص وقت يومي للجلوس مع الأبناء والاستماع لهم ومشاركتهم اهتماماتهم يقوي العلاقة الأسرية.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-pray"></i> الدعاء للأبناء</h3>
+                    <p>دعاء الوالدين لابنائهما من أعظم أسباب صلاحهم. قال إبراهيم عليه السلام: "رَبِّ اجْعَلْنِي مُقِيمَ الصَّلَاةِ وَمِنْ ذُرِّيَّتِي" (إبراهيم:40).</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- قسم معاملة الناس (الأزواج والحدود) -->
+        <div id="relations" class="content-section">
+            <h2 class="section-title">
+
+
+                <i class="fas fa-people-arrows"></i> معاملة الناس والحدود الشرعية
+            </h2>
+            
+            <div class="tips-container">
+                <div class="tip-card">
+                    <h3><i class="fas fa-handshake"></i> معاملة الأزواج</h3>
+                    <p>"وَلَهُنَّ مِثْلُ الَّذِي عَلَيْهِنَّ بِالْمَعْرُوفِ ۚ وَلِلرِّجَالِ عَلَيْهِنَّ دَرَجَةٌ" (البقرة:228). المودة والرحمة أساس العلاقة الزوجية الناجحة.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-user-shield"></i> حدود المرأة في الإسلام</h3>
+                    <p>حدود المرأة في الإسلام تحفظ كرامتها وتصونها، مثل الحجاب الشرعي وعدم الخلوة بالأجنبي، وهي حدود رحمة وحماية.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-balance-scale"></i> الحقوق والواجبات</h3>
+                    <p>لكل من الزوجين حقوق وواجبات، والعدل في تطبيقها يحقق السعادة والاستقرار للأسرة المسلمة.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-comments"></i> الحوار الزوجي</h3>
+                    <p>قال تعالى: "وَجَادِلْهُمْ بِالَّتِي هِيَ أَحْسَنُ" (النحل:125). الحوار الهادئ والمنطقي يحل الكثير من المشكلات الزوجية.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-hands-helping"></i> التعاون الأسري</h3>
+                    <p>التعاون بين أفراد الأسرة في تحمل المسؤوليات وتوزيع المهام يعزز الترابط الأسري ويخفف الأعباء.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-heartbeat"></i> الصبر عند الشدائد</h3>
+                    <p>الصبر عند الشدائد والمصائب من علامات الإيمان، قال تعالى: "وَالصَّابِرِينَ فِي الْبَأْسَاءِ وَالضَّرَّاءِ وَحِينَ الْبَأْسِ" (البقرة:177).</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-smile"></i> الابتسامة في وجه الآخرين</h3>
+                    <p>قال النبي صلى الله عليه وسلم: "تبسمك في وجه أخيك صدقة". الابتسامة الصادقة تذيب الجليد وتفتح القلوب.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-hand-holding-heart"></i> العفو عند المقدرة</h3>
+                    <p>"وَلْيَعْفُوا وَلْيَصْفَحُوا ۗ أَلَا تُحِبُّونَ أَن يَغْفِرَ اللَّهُ لَكُمْ" (النور:22). العفو عن الزلات من صفات المؤمنين.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-comment-medical"></i> الكلمة الطيبة</h3>
+                    <p>"وَقُولُوا لِلنَّاسِ حُسْنًا" (البقرة:83). الكلمة الطيبة صدقة، وهي مفتاح القلوب وبناء العلاقات.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-users"></i> صلة الرحم</h3>
+                    <p>صلة الرحم من أعظم أسباب البركة في الرزق وطول العمر. قال النبي صلى الله عليه وسلم: "من أحب أن يبسط له في رزقه وينسأ له في أثره فليصل رحمه".</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-handshake-alt-slash"></i> تجنب الغيبة والنميمة</h3>
+                    <p>"وَلَا يَغْتَب بَّعْضُكُم بَعْضًا" (الحجرات:12). الغيبة والنميمة من المهلكات التي تهدم العلاقات وتنشر العداوة.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-pray"></i> الدعاء للآخرين</h3>
+                    <p>الدعاء للآخرين في ظهر الغيب من علامات الإخلاص، وهو سبب لاستجابة الدعاء وحصول الأجر.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- قسم قصص وعبر الأنبياء -->
+         <div id="prophet-stories" class="content-section">
+        <h2 class="section-title">
+
+
+            <i class="fas fa-book-open"></i> قصص الأنبياء والعبر
+        </h2>
+        
+        <div class="story-card">
+            <h3 class="story-title"><i class="fas fa-star"></i> قصة نبي الله آدم عليه السلام</h3>
+            <div class="story-content">
+                خلق الله آدم من تراب، ثم علّمه الأسماء كلها، ثم أمر الملائكة بالسجود له. ثم أسكنه الجنة مع زوجه حواء. ثم وسوس لهما الشيطان فأكلا من الشجرة المحرمة، فهبطا إلى الأرض. ثم تاب الله عليهما وهداهما.
+            </div>
+            <div class="lesson">
+                <strong>العبرة:</strong> التوبة النصوح تغفر الذنوب، والحذر من وساوس الشيطان، وقبول توبة الله للعبد مهما عظم ذنبه.
+            </div>
+        </div>
+        
+        <div class="story-card">
+            <h3 class="story-title"><i class="fas fa-star"></i> قصة نبي الله نوح عليه السلام</h3>
+            <div class="story-content">
+                لبث نوح في قومه 950 سنة يدعوهم إلى التوحيد، فلم يؤمن معه إلا قليل. فصنع الفلك بأمر الله، وركب فيه مع المؤمنين، وأغرق الله الكافرين بالطوفان. ثم استقر الفلك على الجودي، وخرج المؤمنون ليعمروا الأرض من جديد.
+            </div>
+            <div class="lesson">
+                <strong>العبرة:</strong> الصبر على الدعوة، وعدم اليأس من استجابة الناس، وأن نصر الله يأتي بعد الصبر.
+            </div>
+        </div>
+        
+        <div class="story-card">
+            <h3 class="story-title"><i class="fas fa-star"></i> قصة نبي الله إبراهيم عليه السلام</h3>
+            <div class="story-content">
+                واجه إبراهيم قومه في عبادة الأصنام، وحطم أصنامهم. فألقوه في النار فجعلها الله برداً وسلاماً. ثم أمره الله بذبح ابنه إسماعيل، فاستجابا للأمر، ففداه الله بكبش عظيم. ثم بنى مع ابنه الكعبة.
+            </div>
+            <div class="lesson">
+                <strong>العبرة:</strong> الإخلاص لله، والتضحية في سبيله، والثقة في حكمة الله ورحمته.
+            </div>
+        </div>
+        
+        <div class="story-card">
+            <h3 class="story-title"><i class="fas fa-star"></i> قصة نبي الله يوسف عليه السلام</h3>
+            <div class="story-content">
+                قصة يوسف عليه السلام من أروع قصص الصبر والثبات على المبدأ. تعرض يوسف للغدر من إخوته، فألقوه في البئر، ثم باعوه بثمن بخس. ثم تعرض لفتنة امرأة العزيز، فصبر وثبت على إيمانه. ثم سجن ظلماً، ثم خرج من السجن وأصبح عزيز مصر. ثم قابل إخوته ووالده بعد سنوات طويلة، فعفا عنهم وصفح. 
+            </div>
+            <div class="lesson">
+                <strong>العبرة:</strong> الصبر في الشدائد، والثقة في نصر الله، والعفو عند المقدرة، واليقين بأن الله مع الصابرين.
+            </div>
+        </div>
+        
+        <div class="story-card">
+            <h3 class="story-title"><i class="fas fa-star"></i> قصة نبي الله أيوب عليه السلام</h3>
+            <div class="story-content">
+                ابتلى الله أيوب عليه السلام في ماله وأهله وجسده، ففقد كل أمواله، ومات أبناؤه، وابتلي في جسده بالمرض الشديد. لكنه صبر واحتسب، ولم يشكُ إلا لله، ولم يفقد إيمانه. وظل على حاله سنوات طويلة، حتى كاد الناس ينفرون منه. فلما اشتد البلاء، دعا ربه: "أَنِّي مَسَّنِيَ الضُّرُّ وَأَنتَ أَرْحَمُ الرَّاحِمِينَ" (الأنبياء:83). فاستجاب الله له وشفاه وعوضه خيراً مما فقد.
+            </div>
+            <div class="lesson">
+                <strong>العبرة:</strong> الصبر على البلاء، واللجوء إلى الله في الشدائد، واليقين بأن الفرج يأتي بعد الشدة، وأن الله لا يضيع أجر الصابرين.
+            </div>
+        </div>
+        
+        <div class="story-card">
+            <h3 class="story-title"><i class="fas fa-star"></i> قصة نبي الله موسى عليه السلام</h3>
+            <div class="story-content">
+                ولد موسى في وقت كان فرعون يقتل أبناء بني إسرائيل، فألقته أمه في اليم بأمر الله، فالتقطته امرأة فرعون وتربى في القصر. ثم هرب بعد أن قتل رجلاً خطأ، ولجأ إلى مدين. ثم كلمه الله عند الطور، وأرسله إلى فرعون لدعوته إلى الإيمان. واجه فرعون بالسحر، ثم أنجاه الله وقومه من فرعون، وأغرق فرعون وجنوده في اليم. ثم كلم الله موسى تكليماً، وأعطاه التوراة.
+            </div>
+            <div class="lesson">
+                <strong>العبرة:</strong> أن الله ينصر المؤمنين ولو بعد حين، وأن القوة الحقيقية في الإيمان والتوكل على الله، وأن الصبر على الأذى في سبيل الله له عظيم الأجر.
+            </div>
+        </div>
+        
+        <div class="story-card">
+            <h3 class="story-title"><i class="fas fa-star"></i> قصة نبي الله داود عليه السلام</h3>
+            <div class="story-content">
+                اختار الله داود بعد أن قتل جالوت وهو فتى صغير، فآتاه الله الملك والحكمة، وكان يصنع الدروع ويسبح الله ويذكر كثيراً. ثم ابتلاه الله بفتنة، فتاب وأناب، فغفر الله له. وكان داود قوياً في الحق، لا يخاف في الله لومة لائم.
+            </div>
+            <div class="lesson">
+                <strong>العبرة:</strong> التوبة النصوح تغفر الذنوب، والقوة مع العدل، والإكثار من ذكر الله في كل الأحوال.
+            </div>
+        </div>
+        
+        <div class="story-card">
+            <h3 class="story-title"><i class="fas fa-star"></i> قصة نبي الله سليمان عليه السلام</h3>
+            <div class="story-content">
+                آتى الله سليمان ملكاً عظيماً، وسخر له الريح والجن والطير، وكان يفهم منطق الحيوانات. ثم ابتلاه الله بفتنة، فتاب وأناب، فغفر الله له. وكان سليمان حكيماً عادلاً، يحكم بين الناس بالحق.
+            </div>
+            <div class="lesson">
+                <strong>العبرة:</strong> أن النعم تحتاج إلى شكر، وأن القوة يجب أن تقترن بالحكمة، والعدل أساس الملك.
+            </div>
+        </div>
+        
+        <div class="story-card">
+            <h3 class="story-title"><i class="fas fa-star"></i> قصة نبي الله يونس عليه السلام</h3>
+            <div class="story-content">
+                أرسل يونس إلى قومه فكذبوه، فغضب وتركهم دون إذن ربه، فابتلعه الحوت. فلما دعا في الظلمات: "لَّا إِلَٰهَ إِلَّا أَنتَ سُبْحَانَكَ إِنِّي كُنتُ مِنَ الظَّالِمِينَ"، استجاب الله له وأنقذه. ثم عاد إلى قومه فآمنوا جميعاً.
+            </div>
+            <div class="lesson">
+                <strong>العبرة:</strong> لا يعجل الإنسان بالحكم، وأن الدعاء في الشدة مفتاح الفرج، وأن التوبة مقبولة مهما عظم الذنب.
+            </div>
+        </div>
+        
+        <div class="story-card">
+            <h3 class="story-title"><i class="fas fa-star"></i> قصة نبي الله عيسى عليه السلام</h3>
+            <div class="story-content">
+                ولد عيسى من مريم العذراء بلا أب، فتكلم في المهد معجزة، ثم أرسله الله نبياً يدعو إلى التوحيد، ويبرئ الأكمه والأبرص بإذن الله، ويحيي الموتى بإذن الله. ثم رفعه الله إليه ولم يقتله اليهود كما زعموا.
+            </div>
+            <div class="lesson">
+                <strong>العبرة:</strong> أن قدرة الله فوق كل شيء، وأن المعجزات تكون بتأييد من الله، وأن الحق يعلو ولا يعلى عليه.
+            </div>
+        </div>
+        
+        <div class="story-card">
+            <h3 class="story-title"><i class="fas fa-star"></i> قصة نبي الله محمد ﷺ</h3>
+            <div class="story-content">
+                ولد النبي محمد ﷺ في مكة يتيماً، فكفله جده ثم عمه أبو طالب. نشأ على الصدق والأمانة حتى لقب بالصادق الأمين. بعثه الله رسولاً وهو في الأربعين من عمره، فدعا إلى التوحيد وتحمل الأذى في سبيل الله. هاجر إلى المدينة فأسس الدولة الإسلامية، ثم عاد فاتحاً مكة. ظل يدعو إلى الإسلام حتى توفي ﷺ بعد أن بلغ الرسالة وأكمل النعمة.
+            </div>
+            <div class="lesson">
+                <strong>العبرة:</strong> الصبر على الشدائد، والثبات على المبدأ، والإخلاص في الدعوة إلى الله، وأن النصر مع الصبر.
+            </div>
+        </div>
+        
+        <!-- الأنبياء المضافة -->
+        <div class="story-card">
+            <h3 class="story-title"><i class="fas fa-star"></i> قصة نبي الله إدريس عليه السلام</h3>
+            <div class="story-content">
+                كان إدريس عليه السلام أول نبي بعد آدم وشيث. وقد رفعه الله مكاناً علياً. وكان يعلم الناس الكتابة والحكمة والعلوم. وكان كثير الذكر لله تعالى.
+            </div>
+            <div class="lesson">
+                <strong>العبرة:</strong> أهمية العلم والتعلم، والارتقاء الروحي بالذكر والعبادة.
+            </div>
+        </div>
+        
+        <div class="story-card">
+            <h3 class="story-title"><i class="fas fa-star"></i> قصة نبي الله هود عليه السلام</h3>
+            <div class="story-content">
+                أرسل هود إلى قوم عاد الذين كانوا في الأحقاف. كانوا أقوياء جبارين، يعبدون الأصنام. دعاهم هود إلى عبادة الله وحده، فكذبوه واستهزؤوا به. فأرسل الله عليهم ريحاً صرصراً عاتية دمرتهم.
+            </div>
+            <div class="lesson">
+                <strong>العبرة:</strong> القوة الحقيقية في طاعة الله، وأن البطر والجبروت يؤدي إلى الهلاك.
+            </div>
+        </div>
+        
+        <div class="story-card">
+            <h3 class="story-title"><i class="fas fa-star"></i> قصة نبي الله صالح عليه السلام</h3>
+            <div class="story-content">
+                أرسل صالح إلى قوم ثمود الذين كانوا ينحتون الجبال بيوتاً. آتاه الله معجزة الناقة. لكنهم عقروا الناقة وعتوا عن أمر ربهم. فأهلكهم الله بالصيحة والرجفة.
+            </div>
+            <div class="lesson">
+                <strong>العبرة:</strong> أن نعمة الله إذا كفرت تحولت إلى نقمة، وأن المعجزات لا تنفع من لا يؤمن.
+            </div>
+        </div>
+        
+        <div class="story-card">
+            <h3 class="story-title"><i class="fas fa-star"></i> قصة نبي الله لوط عليه السلام</h3>
+            <div class="story-content">
+                أرسل لوط إلى قوم سدوم الذين كانوا يأتون الفواحش. دعاهم إلى ترك المنكرات، فرفضوا واستمروا في غيهم. فأنزل الله عليهم عذاباً فأهلكهم بحجارة من سجيل.
+            </div>
+            <div class="lesson">
+                <strong>العبرة:</strong> التحذير من الفواحش والمنكرات، وأن الله يمهل ولا يهمل.
+            </div>
+        </div>
+        
+        <div class="story-card">
+            <h3 class="story-title"><i class="fas fa-star"></i> قصة نبي الله إلياس عليه السلام</h3>
+            <div class="story-content">
+                أرسل إلياس إلى قوم يعبدون الصنم بعل. دعاهم إلى عبادة الله، فكذبوه. فدعا ربه أن يحبس المطر عنهم ثلاث سنوات. ثم دعا الله أن يرفع العذاب عنهم بعد أن آمنوا، لكنهم عادوا إلى كفرهم فأهلكهم الله.
+            </div>
+            <div class="lesson">
+                <strong>العبرة:</strong> أن الله يجيب دعوة المضطر إذا دعاه، لكن الإنسان سريع العودة إلى المعصية.
+            </div>
+        </div>
+        
+        <div class="story-card">
+            <h3 class="story-title"><i class="fas fa-star"></i> قصة نبي الله اليسع عليه السلام</h3>
+            <div class="story-content">
+                كان اليسع تلميذاً لإلياس، ثم أصبح نبياً من بعده. دعا قومه إلى الإيمان بالله، وأيده الله بمعجزات منها إحياء الموتى. لكن قومه كذبوه، فأهلك الله الكافرين منهم.
+            </div>
+            <div class="lesson">
+                <strong>العبرة:</strong> أن الله يبعث الرسل متتابعين لهداية الناس، لكن أكثر الناس لا يؤمنون.
+            </div>
+        </div>
+        
+        <div class="story-card">
+            <h3 class="story-title"><i class="fas fa-star"></i> قصة نبي الله ذو الكفل عليه السلام</h3>
+            <div class="story-content">
+                كان ذو الكفل من الصالحين الذين ورثوا النبوة، وكان قاضياً عادلاً، يحكم بين الناس بالحق. وقد سمي ذا الكفل لأنه تكفل لله بألا يغضب ولا يظلم أحداً.
+            </div>
+            <div class="lesson">
+                <strong>العبرة:</strong> العدل في الحكم، والوفاء بالعهد، والتحكم في النفس عند الغضب.
+            </div>
+        </div>
+        
+        <div class="story-card">
+            <h3 class="story-title"><i class="fas fa-star"></i> قصة نبي الله زكريا عليه السلام</h3>
+            <div class="story-content">
+                كان زكريا من أنبياء بني إسرائيل. دعا ربه أن يرزقه ولداً وهو شيخ كبير وامرأته عاقر. فاستجاب الله له ورزقه يحيى. لكن قتله بنو إسرائيل ظلماً.
+            </div>
+            <div class="lesson">
+                <strong>العبرة:</strong> أن الدعاء يغير القدر، وأن الله يجيب دعوة الداع إذا دعاه.
+            </div>
+        </div>
+        
+        <div class="story-card">
+            <h3 class="story-title"><i class="fas fa-star"></i> قصة نبي الله يحيى عليه السلام</h3>
+            <div class="story-content">
+                ولد يحيى من أبوين شيخين، وكان باراً بوالدين. آتاه الله الحكم صبياً. وكان زاهداً في الدنيا، كثير العبادة. وقتله بنو إسرائيل ظلماً.
+            </div>
+            <div class="lesson">
+                <strong>العبرة:</strong> أن البركة في الطاعة والعبادة، وأن الدنيا دار ابتلاء.
+            </div>
+        </div>
+    </div>
+    
+    
+<!-- قسم النية اليومية -->
+<div class="content-section" id="daily-intention">
+    <h2 class="section-title">
+        <i class="fas fa-heart"></i> النية اليومية
+    </h2>
+    
+    <div class="intention-card">
+        <h3 class="intention-title">
+            <i class="fas fa-lightbulb"></i> نيتي اليوم
+        </h3>
+        <div class="intention-text" id="dailyIntentionText">
+            اللهم إني نويت اليوم أن أكون من عبادك الصالحين، وأسعى في طاعتك، وأبتعد عن معصيتك، وأكون نافعاً لنفسي ولأهلي ولمجتمعي.
+        </div>
+
+        <!-- زر تجديد النية -->
+        <div style="margin-top: 25px;">
+<button class="btn" onclick="showNewIntention()">
+                <i class="fas fa-sync-alt"></i> تجديد النية
+            </button>
+        </div>
+
+        <div style="margin-top: 20px; text-align: center;">
+            <small style="color: var(--light-gold);">يمكنك تجديد نيتك في أي وقت</small>
+        </div>
+    </div>
+
+    <div style="background: var(--off-white); border-radius: 20px; padding: 25px; margin-top: 30px;">
+        <h3 style="color: var(--dark-gold); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+            <i class="fas fa-book"></i> أهمية تجديد النية
+        </h3>
+        <p style="font-size: 1.2rem; line-height: 1.8;">
+            قال رسول الله صلى الله عليه وسلم: "إنما الأعمال بالنيات، وإنما لكل امرئ ما نوى". تجديد النية كل يوم يجعل أعمالنا خالصة لوجه الله تعالى، ويزيد من أجرنا وثوابنا. اجعل نيتك في كل عمل تقوم به أن تبتغي وجه الله وتكون من الصالحين.
+        </p>
+    </div>
+</div>
+
+        <!-- قسم بناء بيت إسلامي -->
+        <div id="islamic-home" class="content-section">
+            <h2 class="section-title">
+
+
+                <i class="fas fa-home"></i> بناء بيت إسلامي
+            </h2>
+            
+            <div style="background: linear-gradient(135deg, var(--gold) 0%, var(--dark-gold) 100%); color: white; border-radius: 20px; padding: 30px; margin-bottom: 30px; text-align: center;">
+                <h3 style="font-size: 1.8rem; margin-bottom: 20px;">"وَاللَّهُ جَعَلَ لَكُم مِّن بُيُوتِكُمْ سَكَنًا" (النحل:80)</h3>
+                <p style="font-size: 1.3rem; line-height: 1.8;">
+                    البيت المسلم هو اللبنة الأساسية في بناء المجتمع الإسلامي. هنا خطوات عملية لبناء بيت يسوده الإيمان والرحمة والسكينة.
+                </p>
+            </div>
+            
+            <div class="building-steps">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>التوحيد والإخلاص</h3>
+                    <p>أساس البيت المسلم أن يكون قائماً على توحيد الله وإخلاص العبادة له. اجعل شعار بيتك "لا إله إلا الله".</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>الصلاة في وقتها</h3>
+                    <p>عوّد أهلك على الصلاة في وقتها، واجعل للبيت ورداً يومياً من القرآن والذكر.</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>الرحمة والمودة</h3>
+                    <p>"وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً" (الروم:21).</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3>التعاون على البر</h3>
+                    <p>تعاونوا على طاعة الله، وتقسيم الأعمال المنزلية، ومساعدة بعضكم البعض.</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">5</div>
+                    <h3>التواصل والحوار</h3>
+                    <p>خصصوا وقتاً للحوار الأسري، والاستماع لبعضكم البعض، وحل المشكلات بالحكمة.</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">6</div>
+                    <h3>التربية بالقدوة</h3>
+                    <p>كن قدوة حسنة لأبنائك في الأقوال والأفعال، فهم يقلدون ما يرون أكثر مما يسمعون.</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">7</div>
+                    <h3>الضيافة وإكرام الضيف</h3>
+                    <p>قال النبي صلى الله عليه وسلم: "من كان يؤمن بالله واليوم الآخر فليكرم ضيفه".</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">8</div>
+                    <h3>صلة الرحم</h3>
+                    <p>حافظ على صلة الأرحام وزيارة الأقارب، فهي من أسباب البركة في الرزق والعمر.</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">9</div>
+                    <h3>الستر والعفاف</h3>
+                    <p>احرص على ستر العيوب وحفظ الأسرار، وعلّم أهلك العفاف والحياء.</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">10</div>
+                    <h3>الدعاء المستمر</h3>
+                    <p>أكثر من الدعاء لأهلك وبيتك: "رَبِّ اجْعَلْنِي مُقِيمَ الصَّلَاةِ وَمِنْ ذُرِّيَّتِي" (إبراهيم:40).</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- قسم تأملات الأسماء الحسنى -->
+        <div class="content-section" id="names-of-allah">
+    <h2 class="section-title">
+        <i class="fas fa-pray"></i> تأملات في أسماء الله الحسنى
+    </h2>
+    
+    <div class="names-controls" style="display: flex; justify-content: center; gap: 15px; margin-bottom: 20px;">
+        <button class="btn" onclick="showRandomName()">
+            <i class="fas fa-random"></i> اسم عشوائي
+        </button>
+        <button class="btn" onclick="showPreviousName()">
+            <i class="fas fa-arrow-left"></i> السابق
+        </button>
+        <button class="btn" onclick="showNextName()">
+            <i class="fas fa-arrow-right"></i> التالي
+        </button>
+    </div>
+    
+    <div class="name-card">
+        <h3 class="name-title" id="currentName">الرحمن</h3>
+        <div class="name-meaning" id="nameMeaning">الذي وسعت رحمته كل شيء</div>
+        <div class="name-reflection" id="nameReflection">
+            إذا تأملنا اسم الرحمن، نجد أن رحمة الله واسعة تشمل المؤمن والكافر في الدنيا، وهي للمؤمنين خاصة في الآخرة. من آثار الإيمان بهذا الاسم أن نكون رحماء بالخلق، وأن نثق برحمة الله مهما كبرت ذنوبنا.
+        </div>
+    </div>
+    
+    <div style="background: var(--off-white); border-radius: 20px; padding: 25px; margin-top: 30px;">
+        <h3 style="color: var(--dark-gold); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+            <i class="fas fa-info-circle"></i> فضل معرفة أسماء الله الحسنى
+        </h3>
+        <p style="font-size: 1.2rem; line-height: 1.8;">
+            قال رسول الله صلى الله عليه وسلم: "إن لله تسعة وتسعين اسماً، مائة إلا واحداً، من أحصاها دخل الجنة". ومعنى "أحصاها" أن يعرفها ويعقل معانيها، ويعبد الله بمقتضاها. فكل اسم من أسماء الله يدل على صفة من صفاته، ويقتضي من العبد نوعاً من العبادة والسلوك.
+        </p>
+    </div>
+</div>
+    </div>
+    <!-- إضافة التبويب في شريط التنقل -->
+<div class="tab" data-target="app-info">
+    <i class="fas fa-info-circle"></i> معلومات التطبيق
+</div>
+
+<!-- قسم معلومات التطبيق -->
+<div id="app-info" class="content-section">
+    <h2 class="section-title">
+        <i class="fas fa-info-circle"></i> معلومات التطبيق
+    </h2>
+    
+    <div class="app-info-container">
+        <div class="app-info-card">
+            <h3><i class="fas fa-mobile-alt"></i> حول التطبيق</h3>
+            <p>
+                تطبيق "مواقيت الإيمان" هو تطبيق إسلامي شامل يهدف إلى مساعدة المسلمين في حياتهم اليومية، 
+                من خلال توفير أوقات الصلاة، الأذكار، القرآن الكريم، الأحاديث النبوية، ونصائح للزواج والتربية.
+                يعمل التطبيق بدون إنترنت ويتميز بتصميم أنيق وسهل الاستخدام.
+            </p>
+        </div>
+        
+        <div class="app-info-card">
+            <h3><i class="fas fa-star"></i> مميزات التطبيق</h3>
+            <ul>
+                <li>مواقيت الصلاة الدقيقة حسب موقعك</li>
+                <li>أذكار الصباح والمساء وأذكار بعد الصلاة</li>
+                <li>برنامج لحفظ القرآن الكريم</li>
+                <li>حديث يومي مع الشرح</li>
+                <li>نصائح للزواج وتربية الأبناء</li>
+                <li>قصص الأنبياء والعبر</li>
+                <li>نية يومية لتحسين حياتك</li>
+                <li>تأملات في أسماء الله الحسنى</li>
+            </ul>
+        </div>
+        
+        <div class="app-info-card">
+            <h3><i class="fas fa-code"></i> معلومات التطوير</h3>
+            <p>
+                <strong>الإصدار:</strong> 1.5.0<br>
+                <strong>تاريخ الإصدار:</strong> 21 جويلية 2025<br>
+                <strong>المطور:</strong> فريق مواقيت الإيمان<br>
+                <strong>الترخيص:</strong> مجاني للاستخدام الشخصي
+            </p>
+        </div>
+        
+        <div class="app-info-card contact-card">
+            <h3><i class="fas fa-envelope"></i> التواصل معنا</h3>
+            <p>
+                نرحب بملاحظاتكم ومقترحاتكم لتحسين التطبيق:<br><br>
+                <i class="fas fa-envelope"></i> 
+                <strong>البريد الإلكتروني:</strong> 
+                <a href="mailto:info@mawaqit-aleman.com">issrasou58@gmail.com</a>
+            </p>
+            
+            <div class="address">
+                <i class="fas fa-map-marker-alt"></i> 
+                <strong>العنوان:</strong><br>
+                المسيلة<br>
+                  الجزائر
+            </div>
+        </div>
+        
+        <div class="app-info-card">
+            <h3><i class="fas fa-share-alt"></i> شارك التطبيق</h3>
+            <p>
+                ساعدنا في نشر التطبيق لينتفع به أكبر عدد من المسلمين:<br><br>
+                <button class="btn share-btn">
+                    <i class="fas fa-share"></i> مشاركة التطبيق
+                </button>
+            </p>
+        </div>
+        
+        <div class="app-info-card">
+            <h3><i class="fas fa-star"></i> قيم التطبيق</h3>
+            <p>
+                إذا أعجبك التطبيق، ساعدنا بتقييمه في متجر التطبيقات:<br><br>
+                <button class="btn rate-btn">
+                    <i class="fas fa-star"></i> تقييم التطبيق
+                </button>
+            </p>
+        </div>
+    </div>
+</div>
+   <script>
+        
+    function incrementCount(button) {
+        const display = button.parentElement.querySelector('.count-display');
+        let count = parseInt(display.textContent) || 0;
+        display.textContent = count + 1;
+    }
+
+    function decrementCount(button) {
+        const display = button.parentElement.querySelector('.count-display');
+        let count = parseInt(display.textContent) || 0;
+        if (count > 0) {
+            display.textContent = count - 1;
+        }
+    }
+
+    function incrementCounter(button) {
+        const counterValue = button.parentElement.querySelector('.counter-value');
+        let count = parseInt(counterValue.textContent);
+        count += 1;
+        counterValue.textContent = count;
+    }
+
+    function decrementCounter(button) {
+        const counterValue = button.parentElement.querySelector('.counter-value');
+        let count = parseInt(counterValue.textContent);
+        if (count > 0) count -= 1;
+        counterValue.textContent = count;
+    }
+
+  // سكربت التنقل بين أنواع الأذكار
+    document.querySelectorAll('.azkar-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            // إزالة التفعيل من جميع التبويبات
+            document.querySelectorAll('.azkar-tab').forEach(t => t.classList.remove('active'));
+            // إخفاء جميع القوائم
+            document.querySelectorAll('.azkar-list').forEach(list => list.classList.remove('active'));
+
+            // تفعيل التبويب الحالي
+            tab.classList.add('active');
+
+            // إظهار قائمة الأذكار المطابقة
+            const target = tab.getAttribute('data-azkar');
+            const targetList = document.getElementById(`${target}-azkar`);
+            if (targetList) {
+                targetList.classList.add('active');
+                targetList.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    });
+    // دالة لعرض التاريخ الميلادي والهجري
+function updateDates() {
+    // التاريخ الميلادي
+    const gregorianDate = new Date();
+    const gregorianOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const gregorianString = gregorianDate.toLocaleDateString('ar-SA', gregorianOptions);
+    document.getElementById('gregorianDate').innerHTML = `<i class="fas fa-calendar-alt"></i> التاريخ الميلادي: ${gregorianString}`;
+    
+    // التاريخ الهجري (نستخدم API أو مكتبة مثل moment-hijri)
+    // هنا مثال بسيط بدون استخدام API
+    const hijriMonths = ["محرم", "صفر", "ربيع الأول", "ربيع الثاني", "جمادى الأولى", "جمادى الآخرة", "رجب", "شعبان", "رمضان", "شوال", "ذو القعدة", "ذو الحجة"];
+    const hijriDay = gregorianDate.getDate();
+    const hijriMonth = hijriMonths[gregorianDate.getMonth()];
+    const hijriYear = 1445; // يجب استبدال هذا بحساب السنة الهجرية الفعلي
+    
+    document.getElementById('hijriDate').innerHTML = `<i class="fas fa-mosque"></i> التاريخ الهجري: ${hijriDay} ${hijriMonth} ${hijriYear}هـ`;
+}
+
+// تنفيذ الدالة عند تحميل الصفحة
+document.addEventListener('DOMContentLoaded', updateDates);
+
+// يمكنك أيضًا تحديث التاريخ كل دقيقة إذا أردت
+setInterval(updateDates, 60000);// بيانات الولايات الجزائرية (للحالات الطارئة عند فشل API)
+ // بيانات الولايات الجزائرية (للحالات الطارئة عند فشل API)
+    const algeriaCities = {
+        "الجزائر العاصمة": { 
+            prayers: { 
+                Fajr: "04:25", 
+                Sunrise: "05:48", 
+                Dhuhr: "12:45", 
+                Asr: "16:25", 
+                Maghrib: "19:42", 
+                Isha: "21:05" 
+            } 
+        },
+        "وهران": { 
+            prayers: { 
+                Fajr: "04:30", 
+                Sunrise: "05:52", 
+                Dhuhr: "12:48", 
+                Asr: "16:28", 
+                Maghrib: "19:45", 
+                Isha: "21:08" 
+            } 
+        },
+        "قسنطينة": { 
+            prayers: { 
+                Fajr: "04:20", 
+                Sunrise: "05:42", 
+                Dhuhr: "12:40", 
+                Asr: "16:20", 
+                Maghrib: "19:38", 
+                Isha: "21:00" 
+            } 
+        },
+        "عنابة": { 
+            prayers: { 
+                Fajr: "04:18", 
+                Sunrise: "05:40", 
+                Dhuhr: "12:38", 
+                Asr: "16:18", 
+                Maghrib: "19:36", 
+                Isha: "20:58" 
+            } 
+        },
+        "بجاية": { 
+            prayers: { 
+                Fajr: "04:22", 
+                Sunrise: "05:44", 
+                Dhuhr: "12:42", 
+                Asr: "16:22", 
+                Maghrib: "19:40", 
+                Isha: "21:02" 
+            } 
+        },
+        "باتنة": { 
+            prayers: { 
+                Fajr: "04:15", 
+                Sunrise: "05:37", 
+                Dhuhr: "12:35", 
+                Asr: "16:15", 
+                Maghrib: "19:33", 
+                Isha: "20:55" 
+            } 
+        },
+        "سطيف": { 
+            prayers: { 
+                Fajr: "04:28", 
+                Sunrise: "05:50", 
+                Dhuhr: "12:46", 
+                Asr: "16:26", 
+                Maghrib: "19:43", 
+                Isha: "21:06" 
+            } 
+        },
+        "تلمسان": { 
+            prayers: { 
+                Fajr: "04:33", 
+                Sunrise: "05:55", 
+                Dhuhr: "12:51", 
+                Asr: "16:31", 
+                Maghrib: "19:48", 
+                Isha: "21:11" 
+            } 
+        },
+        "الشلف": { 
+            prayers: { 
+                Fajr: "04:31", 
+                Sunrise: "05:53", 
+                Dhuhr: "12:49", 
+                Asr: "16:29", 
+                Maghrib: "19:46", 
+                Isha: "21:09" 
+            } 
+        },
+        "غرداية": { 
+            prayers: { 
+                Fajr: "04:10", 
+                Sunrise: "05:32", 
+                Dhuhr: "12:30", 
+                Asr: "16:10", 
+                Maghrib: "19:28", 
+                Isha: "20:50" 
+            } 
+        }
+    };
+// قصص الأنبياء
+const prophetStories = [
+    {
+        title: "قصة نبي الله آدم عليه السلام",
+        content: "خلق الله آدم من تراب، ثم علّمه الأسماء كلها، ثم أمر الملائكة بالسجود له. ثم أسكنه الجنة مع زوجه حواء. ثم وسوس لهما الشيطان فأكلا من الشجرة المحرمة، فهبطا إلى الأرض. ثم تاب الله عليهما وهداهما.",
+        lesson: "العبرة: التوبة النصوح تغفر الذنوب، والحذر من وساوس الشيطان، وقبول توبة الله للعبد مهما عظم ذنبه."
+    },
+    {
+        title: "قصة نبي الله نوح عليه السلام",
+        content: "لبث نوح في قومه 950 سنة يدعوهم إلى التوحيد، فلم يؤمن معه إلا قليل. فصنع الفلك بأمر الله، وركب فيه مع المؤمنين، وأغرق الله الكافرين بالطوفان. ثم استقر الفلك على الجودي، وخرج المؤمنون ليعمروا الأرض من جديد.",
+        lesson: "العبرة: الصبر على الدعوة، وعدم اليأس من استجابة الناس، وأن نصر الله يأتي بعد الصبر."
+    }
+];
+
+// أسماء الله الحسنى كاملة مع معانيها وتأملات
+const namesOfAllah = [
+    {
+        name: "الرحمن",
+        meaning: "الذي وسعت رحمته كل شيء",
+        reflection: "اسم الرحمن يدل على سعة رحمة الله التي تشمل كل المخلوقات في الدنيا، المؤمن والكافر، البر والفاجر. ومن آثار الإيمان بهذا الاسم أن نكون رحماء بالخلق جميعاً، وأن نثق برحمة الله مهما عظمت ذنوبنا."
+    },
+    {
+        name: "الرحيم",
+        meaning: "الذي يرحم المؤمنين خاصة في الآخرة",
+        reflection: "الرحيم هو الذي يخص المؤمنين برحمته في الآخرة. وهذا الاسم يعلمنا أن الله يجازي المحسنين برحمته الخاصة، ويدعونا للعمل الصالح لننال هذه الرحمة."
+    },
+    {
+        name: "الملك",
+        meaning: "الذي له الملك كله، مالك الملوك، المتصرف في خلقه بما يشاء",
+        reflection: "الملك هو المتصرف في ملكه كيف يشاء، لا معقب لحكمه، ولا يسأل عما يفعل. ومن آثار الإيمان بهذا الاسم أن نستشعر عظمة الله وجلاله، ونخضع لأمره ونهيه."
+    },
+    {
+        name: "القدوس",
+        meaning: "المنزه عن كل نقص وعيب",
+        reflection: "القدوس هو الطاهر المنزه عن كل عيب ونقص. وهذا الاسم يدعونا إلى التطهر من الأخلاق الرذيلة والصفات الذميمة، والتحلي بالفضائل."
+    },
+    {
+        name: "السلام",
+        meaning: "المسلم لعباده من كل آفة، الذي سلم من كل عيب",
+        reflection: "السلام هو الذي سلم خلقه من ظلمه، وسلم من كل نقص وعيب. ومن آثار الإيمان بهذا الاسم أن نسلم الناس من ألسنتنا وأيدينا، وننشر السلام في الأرض."
+    },
+    {
+        name: "المؤمن",
+        meaning: "الذي صدق عباده وعده، وأمنهم من ظلمه",
+        reflection: "المؤمن هو الذي صدق وعده لعباده، وآمنهم من عذابه إذا أطاعوه. وهذا الاسم يعلمنا الصدق في القول والعمل، والأمانة في كل شيء."
+    },
+    {
+        name: "المهيمن",
+        meaning: "الشهيد على خلقه، الرقيب عليهم",
+        reflection: "المهيمن هو الشاهد على أعمال عباده، الرقيب عليهم. ومن آثار الإيمان بهذا الاسم أن نستشعر مراقبة الله لنا في كل أحوالنا، فنحسن العمل ونخلص النية."
+    },
+    {
+        name: "العزيز",
+        meaning: "المنيع الذي لا يغلب، الغالب الذي لا يقهر",
+        reflection: "العزيز هو الذي لا يُغلب، الغالب الذي لا يُقهر. وهذا الاسم يعلمنا أن القوة الحقيقية بالله وحده، وأن النصر من عنده."
+    },
+    {
+        name: "الجبار",
+        meaning: "الذي يجبر الضعيف ويساعد المظلوم",
+        reflection: "الجبار هو الذي يجبر كسر الضعفاء، وينصر المظلومين. ومن آثار الإيمان بهذا الاسم أن نلجأ إلى الله عند الضعف والحاجة، وأن نكون عوناً للضعفاء."
+    },
+    {
+        name: "المتكبر",
+        meaning: "المتعالي عن صفات الخلق، المتكبر عن كل سوء",
+        reflection: "المتكبر هو المتعالي عن صفات الخلق، المنزه عن النقائص. وهذا الاسم يعلمنا التواضع وعدم التكبر على عباد الله."
+    },
+    {
+        name: "الخالق",
+        meaning: "الذي خلق كل شيء فقدره تقديراً",
+        reflection: "الخالق هو المبدع لكل شيء، المقدر لكل أمر. ومن آثار الإيمان بهذا الاسم أن نتفكر في مخلوقات الله، ونشكره على نعمه."
+    },
+    {
+        name: "البارئ",
+        meaning: "الذي خلق الخلق عن غير مثال سابق",
+        reflection: "البارئ هو الذي أنشأ الخلق وأبدعه من غير مثال سابق. وهذا الاسم يدعونا إلى الإعجاب بقدرة الله في الخلق والإبداع."
+    },
+    {
+        name: "المصور",
+        meaning: "الذي صور جميع الموجودات، فأعطى كل شيء صورته",
+        reflection: "المصور هو الذي أعطى كل مخلوق صورته التي يتميز بها. ومن آثار الإيمان بهذا الاسم أن نقدر التنوع في الخلق، ونحترم كل مخلوقات الله."
+    },
+    {
+        name: "الغفار",
+        meaning: "الذي يستر ذنوب عباده ويعفو عنها",
+        reflection: "الغفار هو الذي يستر ذنوب عباده ويغفرها. وهذا الاسم يدعونا إلى الاستغفار الدائم، والعفو عن الناس."
+    },
+    {
+        name: "القهار",
+        meaning: "الذي قهر عباده بما شاء من أمره",
+        reflection: "القهار هو الذي قهر الخلق بالموت والفناء. ومن آثار الإيمان بهذا الاسم أن نستعد للقاء الله، ونعمل للآخرة."
+    },
+    {
+        name: "الوهاب",
+        meaning: "الذي يهب العطايا بلا مقابل",
+        reflection: "الوهاب هو الكثير العطاء، الذي يهب بلا مقابل. وهذا الاسم يعلمنا السخاء والجود، والعطاء بلا انتظار مقابل."
+    },
+    {
+        name: "الرزاق",
+        meaning: "الذي يرزق جميع خلقه بما يحتاجون",
+        reflection: "الرزاق هو الذي يتكفل بأرزاق العباد. ومن آثار الإيمان بهذا الاسم أن نتوكل على الله في الرزق، ونعمل بالأسباب."
+    },
+    {
+        name: "الفتاح",
+        meaning: "الذي يفتح أبواب الرزق والخير لعباده",
+        reflection: "الفتاح هو الذي يفتح المغلقات، ويسهل الصعاب. وهذا الاسم يدعونا إلى دعاء الله عند الشدائد والمغلقات."
+    },
+    {
+        name: "العليم",
+        meaning: "الذي يعلم كل شيء، ظاهره وباطنه",
+        reflection: "العليم هو المحيط علمه بكل شيء. ومن آثار الإيمان بهذا الاسم أن نستحي من الله أن يرانا حيث نَهْى، أو يَفْقِدَنَا حيث أمر."
+    },
+    {
+        name: "القابض",
+        meaning: "الذي يقبض الأرزاق والأرواح",
+        reflection: "القابض هو الذي يضيق الأرزاق ويقبض الأرواح. وهذا الاسم يعلمنا أن الضيق من الله، وأن الفرج بيده."
+    },
+    {
+        name: "الباسط",
+        meaning: "الذي يوسع الأرزاق والقلوب",
+        reflection: "الباسط هو الذي يوسع الأرزاق وينشر الرحمة. ومن آثار الإيمان بهذا الاسم أن ننشر الخير ونوسع على الناس."
+    },
+    {
+        name: "الخافض",
+        meaning: "الذي يخفض الجبارين والظالمين",
+        reflection: "الخافض هو الذي يذل المتكبرين. وهذا الاسم يعلمنا التواضع وعدم التكبر."
+    },
+    {
+        name: "الرافع",
+        meaning: "الذي يرفع المؤمنين والأتقياء",
+        reflection: "الرافع هو الذي يرفع درجات المؤمنين. ومن آثار الإيمان بهذا الاسم أن نعمل الصالحات لترفع درجاتنا."
+    },
+    {
+        name: "المعز",
+        meaning: "الذي يعز من يشاء من عباده",
+        reflection: "المعز هو الذي ينصر أولياءه ويؤيدهم. وهذا الاسم يعلمنا أن العزة بالله وحده."
+    },
+    {
+        name: "المذل",
+        meaning: "الذي يذل من يشاء من عباده",
+        reflection: "المذل هو الذي يخذل أعداءه. ومن آثار الإيمان بهذا الاسم أن لا نطلب العزة إلا من الله."
+    },
+    {
+        name: "السميع",
+        meaning: "الذي يسمع كل الأصوات",
+        reflection: "السميع هو الذي لا يخفى عليه شيء في الأرض ولا في السماء. وهذا الاسم يدعونا إلى مراقبة الله في كل أقوالنا."
+    },
+    {
+        name: "البصير",
+        meaning: "الذي يرى كل شيء",
+        reflection: "البصير هو الذي يرى كل شيء ولو كان دقيقاً. ومن آثار الإيمان بهذا الاسم أن نستحي من الله في كل أفعالنا."
+    },
+    {
+        name: "الحكم",
+        meaning: "الذي يحكم بين عباده بالعدل",
+        reflection: "الحكم هو أحكم الحاكمين. وهذا الاسم يعلمنا العدل في الحكم بين الناس."
+    },
+    {
+        name: "العدل",
+        meaning: "الذي لا يجور في حكمه",
+        reflection: "العدل هو الذي يحكم بالحق والإنصاف. ومن آثار الإيمان بهذا الاسم أن نعدل في كل شيء."
+    },
+    {
+        name: "اللطيف",
+        meaning: "الذي يعلم دقائق الأمور",
+        reflection: "اللطيف هو الذي يعلم خفايا الأمور. وهذا الاسم يعلمنا حسن الظن بالله في كل أحوالنا."
+    },
+    {
+        name: "الخبير",
+        meaning: "العالم بخبايا الأمور",
+        reflection: "الخبير هو الذي لا يخفى عليه شيء. ومن آثار الإيمان بهذا الاسم أن نستشعر مراقبة الله في السر والعلن."
+    },
+    {
+        name: "الحليم",
+        meaning: "الذي لا يعاجل العصاة بالعقوبة",
+        reflection: "الحليم هو الصبور الذي لا يعجل بالعقوبة. وهذا الاسم يدعونا إلى الحلم والصبر على أذى الناس."
+    },
+    {
+        name: "العظيم",
+        meaning: "الذي له العظمة والكبرياء",
+        reflection: "العظيم هو الذي لا أعظم منه. ومن آثار الإيمان بهذا الاسم أن نعظم الله في قلوبنا."
+    },
+    {
+        name: "الغفور",
+        meaning: "الذي يغفر الذنوب ويستر العيوب",
+        reflection: "الغفور هو الذي يغفر الذنوب وإن كثرت. وهذا الاسم يدعونا إلى الاستغفار الدائم."
+    },
+    {
+        name: "الشكور",
+        meaning: "الذي يشكر القليل من العمل ويغفر الكثير من الزلل",
+        reflection: "الشكور هو الذي يقبل القليل ويشكر عليه. ومن آثار الإيمان بهذا الاسم أن نشكر الله على نعمه."
+    },
+    {
+        name: "العلي",
+        meaning: "الذي له العلو المطلق",
+        reflection: "العلي هو الذي علا على كل شيء بقدرته. وهذا الاسم يعلمنا تعظيم الله في قلوبنا."
+    },
+    {
+        name: "الكبير",
+        meaning: "الذي له الكبرياء في ذاته وصفاته",
+        reflection: "الكبير هو الذي كبر عن مشابهة الخلق. ومن آثار الإيمان بهذا الاسم أن نستشعر عظمة الله وجلاله."
+    },
+    {
+        name: "الحفيظ",
+        meaning: "الذي يحفظ السماوات والأرض وما فيهما",
+        reflection: "الحفيظ هو الذي يحفظ الكون ويدبر أموره. وهذا الاسم يعلمنا أن نتوكل على الله في حفظنا."
+    },
+    {
+        name: "المقيت",
+        meaning: "الذي يتكفل بأرزاق العباد",
+        reflection: "المقيت هو الذي يرزق كل مخلوق. ومن آثار الإيمان بهذا الاسم أن نطمئن إلى رزق الله."
+    },
+    {
+        name: "الحسيب",
+        meaning: "الذي يكفي عباده كل شيء",
+        reflection: "الحسيب هو الكافي لعباده. وهذا الاسم يعلمنا أن نحسب الله وكيلا في كل أمورنا."
+    },
+    {
+        name: "الجليل",
+        meaning: "العظيم الموصوف بصفات الكبرياء",
+        reflection: "الجليل هو ذو الجلال والعظمة. ومن آثار الإيمان بهذا الاسم أن نهابه ونعظمه."
+    },
+    {
+        name: "الكريم",
+        meaning: "الذي يعطي بلا حساب",
+        reflection: "الكريم هو الكثير الخير، الجواد المعطي. وهذا الاسم يدعونا إلى الكرم والسخاء."
+    },
+    {
+        name: "الرقيب",
+        meaning: "الذي يراقب أحوال العباد",
+        reflection: "الرقيب هو الذي لا يغفل عن خلقه. ومن آثار الإيمان بهذا الاسم أن نستحي من الله في السر والعلن."
+    },
+    {
+        name: "المجيب",
+        meaning: "الذي يجيب دعاء الداعين",
+        reflection: "المجيب هو الذي لا يرد سائلاً. وهذا الاسم يدعونا إلى الإكثار من الدعاء."
+    },
+    {
+        name: "الواسع",
+        meaning: "الذي وسع كل شيء علماً ورحمةً وقدرةً",
+        reflection: "الواسع هو الذي وسع كل شيء. ومن آثار الإيمان بهذا الاسم أن نثق بسعة رحمة الله."
+    },
+    {
+        name: "الحكيم",
+        meaning: "الذي يضع الأشياء في مواضعها",
+        reflection: "الحكيم هو الذي يحكم في خلقه. وهذا الاسم يعلمنا أن نرضى بقضاء الله."
+    },
+    {
+        name: "الودود",
+        meaning: "الذي يحب عباده وعباده يحبونه",
+        reflection: "الودود هو المحب لعباده. ومن آثار الإيمان بهذا الاسم أن نكثر من حب الله وعبادته."
+    },
+    {
+        name: "المجيد",
+        meaning: "الذي له المجد والعظمة",
+        reflection: "المجيد هو ذو المجد والعظمة. وهذا الاسم يعلمنا تعظيم الله في قلوبنا."
+    },
+    {
+        name: "الباعث",
+        meaning: "الذي يبعث الخلق يوم القيامة",
+        reflection: "الباعث هو الذي يحيي الموتى. ومن آثار الإيمان بهذا الاسم أن ناستعد ليوم البعث."
+    },
+    {
+        name: "الشهيد",
+        meaning: "الذي لا يغيب عنه شيء",
+        reflection: "الشهيد هو المطلع على كل شيء. وهذا الاسم يعلمنا مراقبة الله في كل أحوالنا."
+    },
+    {
+        name: "الحق",
+        meaning: "الذي هو الحق في ذاته وصفاته",
+        reflection: "الحق هو الثابت وجوده. ومن آثار الإيمان بهذا الاسم أن نتمسك بالحق في حياتنا."
+    },
+    {
+        name: "الوكيل",
+        meaning: "الذي يتولى أمور عباده",
+        reflection: "الوكيل هو الكفيل بأرزاق العباد. وهذا الاسم يعلمنا التوكل على الله."
+    },
+    {
+        name: "القوي",
+        meaning: "الذي لا يعجزه شيء",
+        reflection: "القوي هو الذي لا يغلبه شيء. ومن آثار الإيمان بهذا الاسم أن نستمد القوة من الله."
+    },
+    {
+        name: "المتين",
+        meaning: "الشديد الذي لا يحتاج إلى معين",
+        reflection: "المتين هو الشديد القوي. وهذا الاسم يعلمنا أن القوة بالله وحده."
+    },
+    {
+        name: "الولي",
+        meaning: "الناصر لأوليائه",
+        reflection: "الولي هو الناصر لأحبابه. ومن آثار الإيمان بهذا الاسم أن نلجأ إلى الله في كل أمورنا."
+    },
+    {
+        name: "الحميد",
+        meaning: "المستحق للحمد في كل شيء",
+        reflection: "الحميد هو المحمود في كل أفعاله. وهذا الاسم يدعونا إلى حمد الله وشكره."
+    },
+    {
+        name: "المحصي",
+        meaning: "الذي أحصى كل شيء عدداً",
+        reflection: "المحصي هو الذي أحصى أعمال العباد. ومن آثار الإيمان بهذا الاسم أن نحاسب أنفسنا قبل أن نحاسب."
+    },
+    {
+        name: "المبدئ",
+        meaning: "الذي أنشأ الخلق من العدم",
+        reflection: "المبدئ هو الذي بدأ الخلق. وهذا الاسم يعلمنا التفكر في بديع صنع الله."
+    },
+    {
+        name: "المعيد",
+        meaning: "الذي يعيد الخلق بعد الموت",
+        reflection: "المعيد هو الذي يحيي الموتى. ومن آثار الإيمان بهذا الاسم أن نستعد للقاء الله."
+    },
+    {
+        name: "المحيي",
+        meaning: "الذي يحيي الموتى",
+        reflection: "المحيي هو الذي يحيي القلوب والأجساد. وهذا الاسم يدعونا إلى طلب الحياة الطيبة من الله."
+    },
+    {
+        name: "المميت",
+        meaning: "الذي يميت الأحياء",
+        reflection: "المميت هو الذي يقبض الأرواح. ومن آثار الإيمان بهذا الاسم أن ناستعد للموت بالعمل الصالح."
+    },
+    {
+        name: "الحي",
+        meaning: "الذي له الحياة الكاملة",
+        reflection: "الحي هو الذي لا يموت. وهذا الاسم يعلمنا أن نعبده كأننا نراه."
+    },
+    {
+        name: "القيوم",
+        meaning: "الذي قام بنفسه وقام به كل شيء",
+        reflection: "القيوم هو الذي لا ينام ولا تأخذه سنة ولا نوم. ومن آثار الإيمان بهذا الاسم أن نتوكل على الله في كل أمورنا."
+    },
+    {
+        name: "الواجد",
+        meaning: "الذي لا يعوزه شيء",
+        reflection: "الواجد هو الغني الذي لا يحتاج إلى شيء. وهذا الاسم يعلمنا أن الغنى بالالله وحده."
+    },
+    {
+        name: "الماجد",
+        meaning: "الذي له الكمال والمجد",
+        reflection: "الماجد هو ذو المجد والعظمة. ومن آثار الإيمان بهذا الاسم أن نعظم الله في قلوبنا."
+    },
+    {
+        name: "الواحد",
+        meaning: "الذي لا شريك له",
+        reflection: "الواحد هو الفرد الذي لا نظير له. وهذا الاسم يدعونا إلى إخلاص العبادة لله وحده."
+    },
+    {
+        name: "الأحد",
+        meaning: "الذي لا ثاني له ولا نظير",
+        reflection: "الأحد هو المنفرد بالكمال. ومن آثار الإيمان بهذا الاسم أن نوحد الله في ألوهيته وربوبيته وأسمائه وصفاته."
+    },
+    {
+        name: "الصمد",
+        meaning: "الذي يقصده الخلق في حاجاتهم",
+        reflection: "الصمد هو الذي يقصده الخلق في حاجاتهم. وهذا الاسم يعلمنا أن نلجأ إلى الله في كل أمورنا."
+    },
+    {
+        name: "القادر",
+        meaning: "الذي لا يعجزه شيء",
+        reflection: "القادر هو الذي على كل شيء قدير. ومن آثار الإيمان بهذا الاسم أن نثق بقدرة الله على كل شيء."
+    },
+    {
+        name: "المقتدر",
+        meaning: "الذي يقدر على كل شيء",
+        reflection: "المقتدر هو الذي لا يعجزه شيء. وهذا الاسم يعلمنا أن القدرة بيد الله وحده."
+    },
+    {
+        name: "المقدم",
+        meaning: "الذي يقدم ما يشاء من خلقه",
+        reflection: "المقدم هو الذي يقدم من يشاء. ومن آثار الإيمان بهذا الاسم أن نقدم ما يحبه الله ويرضاه."
+    },
+    {
+        name: "المؤخر",
+        meaning: "الذي يؤخر ما يشاء من خلقه",
+        reflection: "المؤخر هو الذي يؤخر من يشاء. وهذا الاسم يعلمنا أن نرضى بقضاء الله وقدره."
+    },
+    {
+        name: "الأول",
+        meaning: "الذي ليس قبله شيء",
+        reflection: "الأول هو الذي لا بداية له. ومن آثار الإيمان بهذا الاسم أن نبدأ أعمالنا باسم الله."
+    },
+    {
+        name: "الآخر",
+        meaning: "الذي ليس بعده شيء",
+        reflection: "الآخر هو الذي لا نهاية له. وهذا الاسم يعلمنا أن نستمر في طاعة الله حتى الموت."
+    },
+    {
+        name: "الظاهر",
+        meaning: "الذي ظهر بآياته في خلقه",
+        reflection: "الظاهر هو الذي ظهر بآياته. ومن آثار الإيمان بهذا الاسم أن نتفكر في آيات الله في الكون."
+    },
+    {
+        name: "الباطن",
+        meaning: "الذي لا يدركه بصر ولا خيال",
+        reflection: "الباطن هو الذي لا يدرك بكيف. وهذا الاسم يعلمنا أن الله لا يشبهه شيء من خلقه."
+    },
+    {
+        name: "الوالي",
+        meaning: "المتصرف في خلقه",
+        reflection: "الوالي هو الذي يتولى أمور خلقه. ومن آثار الإيمان بهذا الاسم أن نتوكل على الله في كل أمورنا."
+    },
+    {
+        name: "المتعالي",
+        meaning: "المنزه عن صفات الخلق",
+        reflection: "المتعالي هو المنزه عن النقائص. وهذا الاسم يعلمنا تنزيه الله عن كل نقص."
+    },
+    {
+        name: "البر",
+        meaning: "اللطيف مع عباده",
+        reflection: "البر هو المحسن إلى خلقه. ومن آثار الإيمان بهذا الاسم أن نبر بوالدينا ونحسن إلى الخلق."
+    },
+    {
+        name: "التواب",
+        meaning: "الذي يقبل توبة التائبين",
+        reflection: "التواب هو الذي يتوب على عباده. وهذا الاسم يدعونا إلى التوبة النصوح."
+    },
+    {
+        name: "المنتقم",
+        meaning: "الذي ينتصر من الظالمين",
+        reflection: "المنتقم هو الذي يعاقب المجرمين. ومن آثار الإيمان بهذا الاسم أن لا نظلم أحداً."
+    },
+    {
+        name: "العفو",
+        meaning: "الذي يعفو عن الذنوب",
+        reflection: "العفو هو الذي يصفح عن الزلات. وهذا الاسم يدعونا إلى العفو عن الناس."
+    },
+    {
+        name: "الرؤوف",
+        meaning: "الذي يرحم عباده",
+        reflection: "الرؤوف هو شديد الرحمة. ومن آثار الإيمان بهذا الاسم أن نرحم خلق الله."
+    },
+    {
+        name: "مالك الملك",
+        meaning: "الذي له الملك كله",
+        reflection: "مالك الملك هو المتصرف في ملكه. وهذا الاسم يعلمنا أن الملك لله وحده."
+    },
+    {
+        name: "ذو الجلال والإكرام",
+        meaning: "الذي له العظمة والكرم",
+        reflection: "ذو الجلال والإكرام هو المستحق للتعظيم والإجلال. ومن آثار الإيمان بهذا الاسم أن نعظم الله في قلوبنا."
+    },
+    {
+        name: "المقسط",
+        meaning: "الذي يعدل في حكمه",
+        reflection: "المقسط هو العادل في حكمه. وهذا الاسم يعلمنا العدل في كل شيء."
+    },
+    {
+        name: "الجامع",
+        meaning: "الذي يجمع الخلق يوم القيامة",
+        reflection: "الجامع هو الذي يجمع الأولين والآخرين. ومن آثار الإيمان بهذا الاسم أن ناستعد ليوم الجمع."
+    },
+    {
+        name: "الغني",
+        meaning: "الذي لا يحتاج إلى شيء",
+        reflection: "الغني هو الذي يستغني عن كل شيء. وهذا الاسم يعلمنا أن الغنى بالله وحده."
+    },
+    {
+        name: "المغني",
+        meaning: "الذي يغني من يشاء من عباده",
+        reflection: "المغني هو الذي يغنيك بما آتاك. ومن آثار الإيمان بهذا الاسم أن نطلب الغنى من الله."
+    },
+    {
+        name: "المانع",
+        meaning: "الذي يمنع ما يشاء",
+        reflection: "المانع هو الذي يمنع العطاء عمن يشاء. وهذا الاسم يعلمنا أن النفع والضر بيد الله."
+    },
+    {
+        name: "الضار",
+        meaning: "الذي يضر من يشاء بحكمته",
+        reflection: "الضار هو الذي يضر لحكمة يعلمها. ومن آثار الإيمان بهذا الاسم أن نرضى بقضاء الله."
+    },
+    {
+        name: "النافع",
+        meaning: "الذي ينفع من يشاء",
+        reflection: "النافع هو الذي ينفع عباده. وهذا الاسم يعلمنا أن نطلب النفع من الله."
+    },
+    {
+        name: "النور",
+        meaning: "الذي نور السماوات والأرض",
+        reflection: "النور هو الذي أنار القلوب بنور الهداية. ومن آثار الإيمان بهذا الاسم أن نستنير بنور القرآن."
+    },
+    {
+        name: "الهادي",
+        meaning: "الذي يهدي من يشاء",
+        reflection: "الهادي هو الذي يهدي القلوب. وهذا الاسم يدعونا إلى طلب الهداية من الله."
+    },
+    {
+        name: "البديع",
+        meaning: "الذي خلق الخلق على غير مثال",
+        reflection: "البديع هو المبدع في خلقه. ومن آثار الإيمان بهذا الاسم أن نتفكر في بديع صنع الله."
+    },
+    {
+        name: "الباقي",
+        meaning: "الذي لا يفنى",
+        reflection: "الباقي هو الدائم الذي لا يزول. وهذا الاسم يعلمنا أن نعمل للدار الباقية."
+    },
+    {
+        name: "الوارث",
+        meaning: "الذي يرث الأرض ومن عليها",
+        reflection: "الوارث هو الذي يبقى بعد فناء الخلق. ومن آثار الإيمان بهذا الاسم أن ناستعد للقاء الله."
+    },
+    {
+        name: "الرشيد",
+        meaning: "الذي يهدي إلى الصواب",
+        reflection: "الرشيد هو الذي يرشد عباده. وهذا الاسم يدعونا إلى طلب الهداية من الله."
+    },
+    {
+        name: "الصبور",
+        meaning: "الذي لا يعجل بالعقوبة",
+        reflection: "الصبور هو الحليم الذي لا يعجل. ومن آثار الإيمان بهذا الاسم أن نتحلى بالصبر."
+    }
+];
+
+let currentNameIndex = 0;
+
+function showName(index) {
+    const name = namesOfAllah[index];
+    document.getElementById('currentName').textContent = name.name;
+    document.getElementById('nameMeaning').textContent = name.meaning;
+    document.getElementById('nameReflection').textContent = name.reflection;
+}
+
+function showNextName() {
+    currentNameIndex = (currentNameIndex + 1) % namesOfAllah.length;
+    showName(currentNameIndex);
+}
+
+function showPreviousName() {
+    currentNameIndex = (currentNameIndex - 1 + namesOfAllah.length) % namesOfAllah.length;
+    showName(currentNameIndex);
+}
+
+function showRandomName() {
+    currentNameIndex = Math.floor(Math.random() * namesOfAllah.length);
+    showName(currentNameIndex);
+}
+
+// عرض أول اسم عند تحميل الصفحة
+document.addEventListener('DOMContentLoaded', () => {
+    showName(0);
+});
+   
+// النوايا اليومية
+// النوايا اليومية
+// نوايا يومية متنوعة
+// نوايا يومية متنوعة
+// التبديل بين التبويبات والأقسام
+    // تبويبات التنقل
+    document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
+
+            tab.classList.add('active');
+
+            const target = tab.getAttribute('data-target');
+            const targetSection = document.getElementById(target);
+            if (targetSection) {
+                targetSection.classList.add('active');
+                targetSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    });
+
+   // بيانات النوايا اليومية
+const dailyIntentions = [
+    "اللهم إني نويت اليوم الإخلاص في عملي، وإتقان ما أكلف به، ومساعدة المحتاجين، وبر الوالدين، وصلة الأرحام.",
+    "اللهم إني نويت اليوم حفظ لساني من الغيبة والنميمة، وغض بصري عن المحرمات، وحفظ فرجي من الفواحش.",
+    "اللهم إني نويت اليوم الصبر على الابتلاء، والرضا بقضائك، والشكر على نعمائك، والاستغفار من ذنوبي.",
+    "اللهم إني نويت اليوم قراءة وردي من القرآن بتدبر، وحفظ آية جديدة، والعمل بما تعلمته من كتابك.",
+    "اللهم إني نويت اليوم الذكر الكثير، والاستغفار في الأسحار، والدعاء في أوقات الإجابة، والصدقة سراً وعلانية.",
+    "اللهم إني نويت اليوم إفشاء السلام، وإطعام الطعام، وصلة الأرحام، والصلاة بالليل والناس نيام.",
+    "اللهم إني نويت اليوم التبسم في وجه إخواني، وتفريج كرب مكروب، وإدخال السرور على مسلم.",
+    "اللهم إني نويت اليوم تعلم علم نافع، وتعليم من لا يعلم، والدعوة إلى الخير بالحكمة والموعظة الحسنة.",
+    "اللهم إني نويت اليوم المحافظة على الصلوات في وقتها، والخشوع فيها، والإكثار من النوافل والقربات.",
+    "اللهم إني نويت اليوم الصدق في القول والعمل، والأمانة في كل شيء، والوفاء بالعهود والوعود.",
+    "اللهم إني نويت اليوم حسن الخلق مع الجميع، ولين الجانب، وكظم الغيظ، والعفو عن المسيء.",
+    "اللهم إني نويت اليوم التوبة النصوح من جميع الذنوب، والإقلاع عن المعاصي، وترك المنكرات.",
+    "اللهم إني نويت اليوم البركة في وقتي، ورضاك عني، وقبول عملي، وحسن الخاتمة.",
+    "اللهم إني نويت اليوم بناء بيت إسلامي، وتربية أولاد تربية صالحة، وتحصين أسرتي من الفتن.",
+    "اللهم إني نويت اليوم الجهاد في سبيلك، والصبر على الأذى، والثبات على الدين حتى الممات."
+];
+
+let currentIntentionIndex = 0;
+
+// دالة عرض نية جديدة
+function showNewIntention() {
+    const intentionText = document.getElementById('dailyIntentionText');
+    if (intentionText) {
+        currentIntentionIndex = (currentIntentionIndex + 1) % dailyIntentions.length;
+        intentionText.textContent = dailyIntentions[currentIntentionIndex];
+    }
+}
+
+// عرض نية عشوائية عند تحميل الصفحة
+document.addEventListener('DOMContentLoaded', () => {
+    currentIntentionIndex = Math.floor(Math.random() * dailyIntentions.length);
+    const intentionText = document.getElementById('dailyIntentionText');
+    if (intentionText) {
+        intentionText.textContent = dailyIntentions[currentIntentionIndex];
+    }
+});
+
+// أحاديث يومية
+const dailyHadiths = [
+    {
+        text: "قال رسول الله صلى الله عليه وسلم: 'من قال لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شيء قدير، عشر مرات، كان كمن أعتق أربعة أنفس من ولد إسماعيل'.",
+        reference: "رواه البخاري ومسلم"
+    },
+    {
+        text: "قال رسول الله صلى الله عليه وسلم: 'الكلمة الطيبة صدقة'.",
+        reference: "رواه البخاري ومسلم"
+    }
+];
+// أحاديث مع تفسيرها
+const hadithsWithExplanation = [
+    {
+        text: "مَنْ كَانَ يُؤْمِنُ بِاللَّهِ وَالْيَوْمِ الْآخِرِ فَلْيَقُلْ خَيْرًا أَوْ لِيَصْمُتْ",
+        reference: "رواه البخاري ومسلم",
+        explanation: `
+            هذا الحديث العظيم من جوامع الكلم التي أوتيها النبي صلى الله عليه وسلم، وهو أصل عظيم في أدب اللسان. 
+            والمعنى: أن من كان يؤمن بالله واليوم الآخر إيمانًا صادقًا يثمر العمل الصالح، فليحفظ لسانه ولا يتكلم إلا بخير، 
+            وإلا فليصمت. وهذا يشمل جميع أنواع الكلام، فيجب على المسلم أن يفكر قبل أن يتكلم، فإن كان الكلام خيرًا 
+            وله فائدة تكلم به، وإن كان غير ذلك فالسكوت أولى.
+            
+            <br><br>
+            ومن فوائد الحديث:
+            <ul>
+                <li>الحث على حفظ اللسان من كل ما لا خير فيه</li>
+                <li>التحذير من فضول الكلام الذي لا فائدة منه</li>
+                <li>ربط الإيمان بالسلوك العملي في الحياة</li>
+                <li>أن الصمت أحيانًا يكون من الإيمان</li>
+            </ul>
+        `
+    },
+    {
+        text: "لاَ يُؤْمِنُ أَحَدُكُمْ حَتَّى يُحِبَّ لأَخِيهِ مَا يُحِبُّ لِنَفْسِهِ",
+        reference: "رواه البخاري ومسلم",
+        explanation: `
+            هذا الحديث من أعظم الأحاديث التي تنظم العلاقات بين المسلمين، وهو من جوامع الكلم. 
+            والمعنى: لا يكمل إيمان العبد حتى يحب لأخيه المسلم من الخير ما يحبه لنفسه، 
+            ويكره له من الشر ما يكرهه لنفسه. وهذا يشمل جميع جوانب الحياة من أمور الدين والدنيا.
+            
+            <br><br>
+            ومن فوائد الحديث:
+            <ul>
+                <li>بيان كمال الإيمان وحسن الخلق</li>
+                <li>الحث على الإيثار وحب الخير للآخرين</li>
+                <li>أن حب الخير للغير من علامات الإيمان</li>
+                <li>التحذير من الحسد والبغض بين المسلمين</li>
+            </ul>
+        `
+    },
+    {
+        text: "إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ، وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى",
+        reference: "رواه البخاري ومسلم",
+        explanation: `
+            هذا الحديث أحد الأحاديث التي عليها مدار الإسلام، وهو أصل عظيم في تصحيح الأعمال. 
+            والمعنى: أن الأعمال لا تقبل إلا بالنية الصالحة الخالصة لله تعالى، 
+            وأن الإنسان يحصل على ثواب عمله بحسب نيته، فمن نوى خيرًا كتب له، ومن نوى شرًا كتب عليه.
+            
+            <br><br>
+            ومن فوائد الحديث:
+            <ul>
+                <li>بيان أهمية النية في الأعمال</li>
+                <li>أن النية هي التي تميز العادة عن العبادة</li>
+                <li>أن الأعمال تتضاعف بحسب النية</li>
+                <li>الحث على الإخلاص في العمل</li>
+            </ul>
+        `
+    },
+    {
+        text: "الكَيِّسُ مَنْ دَانَ نَفْسَهُ وَعَمِلَ لِمَا بَعْدَ المَوْتِ، وَالعَاجِزُ مَنْ أَتْبَعَ نَفْسَهُ هَوَاهَا وَتَمَنَّى عَلَى اللَّهِ",
+        reference: "رواه الترمذي وحسنه الألباني",
+        explanation: `
+            هذا الحديث يبين الفرق بين العاقل الجاد في حياته والعاجز المفرط. 
+            فالكيس هو العاقل الفطن الذي يحاسب نفسه على تقصيرها، ويعمل للآخرة، 
+            أما العاجز فهو الذي يتبع هواه ويتمنى على الله الأماني دون عمل.
+            
+            <br><br>
+            ومن فوائد الحديث:
+            <ul>
+                <li>الحث على محاسبة النفس</li>
+                <li>الترغيب في العمل للآخرة</li>
+                <li>التحذير من اتباع الهوى</li>
+                <li>أن الأماني دون عمل لا تنفع</li>
+            </ul>
+        `
+    },
+    {
+        text: "مَنْ سَنَّ فِي الإِسْلامِ سُنَّةً حَسَنَةً فَلَهُ أَجْرُهَا وَأَجْرُ مَنْ عَمِلَ بِهَا إِلَى يَوْمِ القِيَامَةِ",
+        reference: "رواه مسلم",
+        explanation: `
+            هذا الحديث يبين فضيلة الدلالة على الخير وتعليم الناس السنة الحسنة. 
+            فمن ابتكر طريقة حسنة في العبادة أو الدعوة أو أي عمل صالح، 
+            واقتدى به الناس، كان له مثل أجورهم دون أن ينقص من أجورهم شيء.
+            
+            <br><br>
+            ومن فوائد الحديث:
+            <ul>
+                <li>الحث على الابتكار في الخير</li>
+                <li>بيان فضل الدلالة على الخير</li>
+                <li>أن الأجر يمتد إلى يوم القيامة</li>
+                <li>الترغيب في نشر السنة الحسنة</li>
+            </ul>
+        `
+    }
+];
+
+let currentHadithIndex = 0;
+
+function showHadith(index) {
+    const hadith = hadithsWithExplanation[index];
+    document.getElementById('hadithText').textContent = hadith.text;
+    document.getElementById('hadithReference').textContent = hadith.reference;
+    document.getElementById('hadithExplanation').innerHTML = hadith.explanation;
+}
+
+function showNextHadith() {
+    currentHadithIndex = (currentHadithIndex + 1) % hadithsWithExplanation.length;
+    showHadith(currentHadithIndex);
+}
+
+function showPreviousHadith() {
+    currentHadithIndex = (currentHadithIndex - 1 + hadithsWithExplanation.length) % hadithsWithExplanation.length;
+    showHadith(currentHadithIndex);
+}
+
+function showRandomHadith() {
+    currentHadithIndex = Math.floor(Math.random() * hadithsWithExplanation.length);
+    showHadith(currentHadithIndex);
+}
+
+// عرض أول حديث عند تحميل الصفحة
+document.addEventListener('DOMContentLoaded', () => {
+    showHadith(0);
+});
+
+// DOM Elements
+
+    // DOM Elements
+    const prayerGrid = document.getElementById('prayerGrid');
+    const locationInfo = document.getElementById('locationInfo');
+    const countrySelect = document.getElementById('country-select');
+    const cityInput = document.getElementById('city-input');
+    const searchBtn = document.getElementById('search-btn');
+    const methodSelect = document.getElementById('method-select');
+    const prayerNotification = document.getElementById('prayerNotification');
+    const notificationText = document.getElementById('notificationText');
+    const athanAudio = document.getElementById('athanAudio');
+    const gregorianDateEl = document.getElementById('gregorianDate');
+    const hijriDateEl = document.getElementById('hijriDate');
+    const countdownEl = document.getElementById('countdownToNextPrayer');
+    const tabs = document.querySelectorAll('.tab');
+    const contentSections = document.querySelectorAll('.content-section');
+
+    // Current state
+    let currentCity = "";
+    let currentCountry = "DZ";
+    let currentMethod = 2;
+    let currentPrayers = {};
+    let nextPrayer = null;
+    let prayerCheckInterval = null;
+    let notifiedPrayers = [];
+    let snoozeTimeout = null;
+
+    // Initialize the app
+    function initApp() {
+        // Load saved settings
+        loadSettings();
+        
+        // Set up event listeners
+        setupEventListeners();
+        
+        // Get initial prayer times
+        getPrayerTimes();
+        
+        // Try to get user location
+        getUserLocation();
+        
+        // Start prayer time checker
+        checkPrayerTimes();
+        setInterval(checkPrayerTimes, 30000); // Check every 30 seconds
+        
+        // Update dates
+        updateDates();
+        setInterval(updateDates, 60000); // Update every minute
+        
+        // Set up tab switching
+        setupTabs();
+    }
+
+    // Load saved settings from localStorage
+    function loadSettings() {
+        const savedCity = localStorage.getItem('prayerCity');
+        const savedCountry = localStorage.getItem('prayerCountry');
+        const savedMethod = localStorage.getItem('prayerMethod');
+        
+        if (savedCity) cityInput.value = savedCity;
+        if (savedCountry) countrySelect.value = savedCountry;
+        if (savedMethod) methodSelect.value = savedMethod;
+        
+        currentCity = savedCity || "";
+        currentCountry = savedCountry || "DZ";
+        currentMethod = savedMethod || 2;
+    }
+
+    // Save settings to localStorage
+    function saveSettings() {
+        localStorage.setItem('prayerCity', currentCity);
+        localStorage.setItem('prayerCountry', currentCountry);
+        localStorage.setItem('prayerMethod', currentMethod);
+    }
+
+    // Set up event listeners
+    function setupEventListeners() {
+        // Search button click
+        searchBtn.addEventListener('click', getPrayerTimes);
+        
+        // Method select change
+        methodSelect.addEventListener('change', function() {
+            currentMethod = this.value;
+            saveSettings();
+            getPrayerTimes();
+        });
+        
+        // Country select change
+        countrySelect.addEventListener('change', function() {
+            currentCountry = this.value;
+            saveSettings();
+        });
+        
+        // City input enter key
+        cityInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                getPrayerTimes();
+            }
+        });
+        
+        // Notification buttons
+        document.querySelector('.notification-btn.primary')?.addEventListener('click', closeNotification);
+        document.querySelector('.notification-btn.secondary')?.addEventListener('click', snoozeNotification);
+    }
+
+    // Get prayer times from API
+    async function getPrayerTimes() {
+        const city = cityInput.value.trim();
+        if (!city) {
+            alert("الرجاء إدخال اسم المدينة");
+            return;
+        }
+        
+        currentCity = city;
+        saveSettings();
+        
+        locationInfo.textContent = `جاري جلب أوقات الصلاة لمدينة ${city}...`;
+        
+        try {
+            const today = new Date();
+            const dateStr = `${today.getDate()}-${today.getMonth() + 1}-${today.getFullYear()}`;
+            
+            const response = await fetch(
+                `https://api.aladhan.com/v1/timingsByCity/${dateStr}?city=${city}&country=${currentCountry}&method=${currentMethod}`
+            );
+            
+            const data = await response.json();
+            
+            if (data.code === 200) {
+                displayPrayerTimes(data.data);
+            } else {
+                throw new Error(data.data);
+            }
+        } catch (error) {
+            console.error("Error fetching prayer times:", error);
+            locationInfo.textContent = `خطأ في جلب البيانات لمدينة ${city}. جاري استخدام البيانات المحلية.`;
+            
+            // Fallback to local data if available
+            if (algeriaCities[city]) {
+                displayPrayerTimes({
+                    timings: algeriaCities[city].prayers,
+                    meta: {
+                        method: {
+                            name: "بيانات محلية"
+                        }
+                    }
+                });
+            } else {
+                locationInfo.textContent = "لا توجد بيانات متاحة لهذه المدينة.";
+            }
+        }
+    }
+
+    // Display prayer times
+    function displayPrayerTimes(data) {
+        const timings = data.timings;
+        currentPrayers = timings;
+        
+        locationInfo.textContent = `أوقات الصلاة لمدينة ${currentCity} - طريقة حساب: ${data.meta.method.name}`;
+        
+        // Clear previous prayer times
+        prayerGrid.innerHTML = "";
+        
+        const now = new Date();
+        const currentTime = now.getHours() * 60 + now.getMinutes();
+        
+        const prayerTimes = [
+            { name: "الفجر", time: timings.Fajr, icon: "fas fa-moon" },
+            { name: "الشروق", time: timings.Sunrise, icon: "fas fa-sun" },
+            { name: "الظهر", time: timings.Dhuhr, icon: "fas fa-sun" },
+            { name: "العصر", time: timings.Asr, icon: "fas fa-sun" },
+            { name: "المغرب", time: timings.Maghrib, icon: "fas fa-sun" },
+            { name: "العشاء", time: timings.Isha, icon: "fas fa-moon" }
+        ];
+        
+        // Find next prayer
+        nextPrayer = null;
+        let nextPrayerIndex = -1;
+        for (let i = 0; i < prayerTimes.length; i++) {
+            const [hours, minutes] = prayerTimes[i].time.split(':').map(Number);
+            const prayerMinutes = hours * 60 + minutes;
+            
+            if (prayerMinutes > currentTime) {
+                nextPrayer = prayerTimes[i];
+                nextPrayerIndex = i;
+                break;
+            }
+        }
+        
+        // If all prayers passed today, next prayer is Fajr tomorrow
+        if (!nextPrayer) {
+            nextPrayer = prayerTimes[0];
+            nextPrayerIndex = 0;
+        }
+        
+        // Create prayer cards
+        prayerTimes.forEach((prayer, index) => {
+            const isActive = nextPrayer && prayer.name === nextPrayer.name;
+            const isNext = index === nextPrayerIndex + 1 || (nextPrayerIndex === prayerTimes.length - 1 && index === 0);
+            
+            const card = document.createElement('div');
+            card.className = `prayer-card ${isActive ? 'active' : ''} ${isNext ? 'next' : ''}`;
+            card.innerHTML = `
+                <div class="prayer-name">${prayer.name}</div>
+                <div class="prayer-time">${prayer.time}</div>
+                <i class="${prayer.icon}"></i>
+            `;
+            prayerGrid.appendChild(card);
+        });
+        
+        // Update countdown
+        updateCountdown();
+        
+        // Start checking for prayer times
+        startPrayerTimeChecker();
+    }
+
+    // Update countdown to next prayer
+    function updateCountdown() {
+        if (!nextPrayer || !currentPrayers) return;
+        
+        const now = new Date();
+        const currentTime = now.getHours() * 60 + now.getMinutes();
+        
+        const [hours, minutes] = nextPrayer.time.split(':').map(Number);
+        const prayerTime = hours * 60 + minutes;
+        
+        let diff = prayerTime - currentTime;
+        
+        // If prayer is tomorrow (negative diff)
+        if (diff < 0) {
+            diff += 24 * 60; // Add 24 hours
+        }
+        
+        const hoursLeft = Math.floor(diff / 60);
+        const minutesLeft = diff % 60;
+        
+        countdownEl.innerHTML = `
+            <i class="fas fa-hourglass-half"></i> متبقٍ للصلاة القادمة (${nextPrayer.name}): 
+            ${hoursLeft > 0 ? hoursLeft + ' ساعة و ' : ''}${minutesLeft} دقيقة
+        `;
+    }
+
+    // Start checking for prayer times
+    function startPrayerTimeChecker() {
+        // Clear any existing interval
+        if (prayerCheckInterval) {
+            clearInterval(prayerCheckInterval);
+        }
+        
+        // Check every minute
+        prayerCheckInterval = setInterval(checkPrayerTime, 60000);
+        
+        // Initial check
+        checkPrayerTime();
+    }
+
+    // Check if it's time for prayer
+    function checkPrayerTime() {
+        if (!nextPrayer || !currentPrayers) return;
+        
+        const now = new Date();
+        const currentTime = now.getHours() * 60 + now.getMinutes();
+        
+        const [hours, minutes] = nextPrayer.time.split(':').map(Number);
+        const prayerTime = hours * 60 + minutes;
+        
+        // Update countdown
+        updateCountdown();
+        
+        // If current time is within 1 minute of prayer time
+        if (Math.abs(currentTime - prayerTime) <= 1) {
+            showPrayerNotification(nextPrayer.name);
+            
+            // Find next prayer
+            const prayerTimes = [
+                { name: "الفجر", time: currentPrayers.Fajr },
+                { name: "الظهر", time: currentPrayers.Dhuhr },
+                { name: "العصر", time: currentPrayers.Asr },
+                { name: "المغرب", time: currentPrayers.Maghrib },
+                { name: "العشاء", time: currentPrayers.Isha }
+            ];
+            
+            for (let i = 0; i < prayerTimes.length; i++) {
+                const [h, m] = prayerTimes[i].time.split(':').map(Number);
+                const pt = h * 60 + m;
+                
+                if (pt > currentTime) {
+                    nextPrayer = prayerTimes[i];
+                    break;
+                }
+            }
+            
+            // If all prayers passed today, next prayer is Fajr tomorrow
+            if (!nextPrayer) {
+                nextPrayer = { name: "الفجر", time: currentPrayers.Fajr };
+            }
+            
+            // Update display
+            displayPrayerTimes({ timings: currentPrayers, meta: { method: { name: "بيانات محلية" } } });
+        }
+    }
+
+    // Show prayer notification
+    function showPrayerNotification(prayerName) {
+        const notificationToggle = document.getElementById('prayer-notification-toggle');
+        if (!notificationToggle || !notificationToggle.checked) return;
+        
+        notificationText.textContent = `حان الآن وقت صلاة ${prayerName}، هيا بنا إلى الصلاة!`;
+        prayerNotification.style.display = 'block';
+        
+        // Play athan sound if enabled
+        const athanToggle = document.getElementById('athan-sound-toggle');
+        if (athanToggle && athanToggle.checked && athanAudio) {
+            athanAudio.currentTime = 0;
+            athanAudio.play().catch(e => console.error("Error playing athan:", e));
+        }
+    }
+
+    // Close notification
+    function closeNotification() {
+        prayerNotification.style.display = 'none';
+    }
+
+    // Snooze notification
+    function snoozeNotification() {
+        prayerNotification.style.display = 'none';
+        if (snoozeTimeout) clearTimeout(snoozeTimeout);
+        snoozeTimeout = setTimeout(() => {
+            showPrayerNotification(nextPrayer?.name || 'الصلاة');
+        }, 5 * 60 * 1000); // 5 minutes
+    }
+
+    // Get user location
+    function getUserLocation() {
+        if (!navigator.geolocation) {
+            locationInfo.textContent = "المتصفح لا يدعم خدمة الموقع. الرجاء إدخال المدينة يدوياً.";
+            return;
+        }
+        
+        locationInfo.textContent = "جاري تحديد موقعك...";
+        
+        navigator.geolocation.getCurrentPosition(
+            async position => {
+                try {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    
+                    // Use reverse geocoding to get city name
+                    const response = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=ar`);
+                    const data = await response.json();
+                    
+                    if (data.city) {
+                        currentCity = data.city;
+                        cityInput.value = currentCity;
+                        getPrayerTimes();
+                    } else {
+                        locationInfo.textContent = "تم تحديد موقعك ولكن لا يمكن تحديد اسم المدينة. الرجاء إدخالها يدوياً.";
+                    }
+                } catch (error) {
+                    console.error("Error getting location:", error);
+                    locationInfo.textContent = "تم تحديد موقعك ولكن لا يمكن تحديد اسم المدينة. الرجاء إدخالها يدوياً.";
+                }
+            },
+            error => {
+                console.error("Error getting location:", error);
+                locationInfo.textContent = "تعذر تحديد موقعك. الرجاء إدخال المدينة يدوياً.";
+            }
+        );
+    }
+
+    // Update Gregorian and Hijri dates
+    function updateDates() {
+        const now = new Date();
+        
+        // Gregorian date
+        const gregorianOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const gregorianDate = now.toLocaleDateString('ar-EG', gregorianOptions);
+        gregorianDateEl.innerHTML = `<i class="fas fa-calendar-alt"></i> التاريخ الميلادي: ${gregorianDate}`;
+        
+        // Hijri date
+        const hijriDate = new Intl.DateTimeFormat('ar-u-ca-islamic', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        }).format(now);
+        
+        hijriDateEl.innerHTML = `<i class="fas fa-mosque"></i> التاريخ الهجري: ${hijriDate}`;
+    }
+
+    // Check if it's time for prayer and show notification
+    function checkPrayerTimes() {
+        if (!currentPrayers) return;
+        
+        const now = new Date();
+        const currentTime = now.getHours() * 60 + now.getMinutes();
+        const prayers = currentPrayers;
+        
+        const prayerTimes = [
+            { name: "الفجر", time: prayers.Fajr },
+            { name: "الظهر", time: prayers.Dhuhr },
+            { name: "العصر", time: prayers.Asr },
+            { name: "المغرب", time: prayers.Maghrib },
+            { name: "العشاء", time: prayers.Isha }
+        ];
+        
+        // Check each prayer time
+        for (const prayer of prayerTimes) {
+            const [hours, minutes] = prayer.time.split(':').map(Number);
+            const prayerMinutes = hours * 60 + minutes;
+            
+            // If current time is within 1 minute of prayer time and not notified yet
+            if (Math.abs(currentTime - prayerMinutes) <= 1 && !notifiedPrayers.includes(prayer.name)) {
+                showPrayerNotification(prayer.name);
+                notifiedPrayers.push(prayer.name);
+            }
+        }
+    }
+
+    // Set up main tabs
+    function setupTabs() {
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const target = tab.getAttribute('data-target');
+                if (!target) return;
+                
+                // Remove active class from all tabs
+                tabs.forEach(t => t.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                // Hide all content sections
+                contentSections.forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // Show target content section
+                const targetSection = document.getElementById(target);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                }
+            });
+        });
+    }
+
+    // Initialize the app when DOM is loaded
+    document.addEventListener('DOMContentLoaded', initApp);
+
+    // Make functions available globally for HTML onclick handlers
+    window.closeNotification = closeNotification;
+    window.snoozeNotification = snoozeNotification;
+
+</script>
+
+</body>
+</html>
