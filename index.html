@@ -3112,8 +3112,9 @@
         </div>
     </div>
 </div>
+
    <script>
-        
+     
     function incrementCount(button) {
         const display = button.parentElement.querySelector('.count-display');
         let count = parseInt(display.textContent) || 0;
@@ -4479,8 +4480,72 @@ document.addEventListener('DOMContentLoaded', () => {
     // Make functions available globally for HTML onclick handlers
     window.closeNotification = closeNotification;
     window.snoozeNotification = snoozeNotification;
+// تسجيل Service Worker
+if ('serviceWorker' in navigator && 'PushManager' in window) {
+    navigator.serviceWorker.register('service-worker.js')
+        .then(registration => {
+            console.log('Service Worker registered');
+            
+            // طلب الإذن للإشعارات
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    console.log('Notification permission granted');
+                    
+                    // إعداد Push Notifications (مثال باستخدام Firebase)
+                    const firebaseConfig = {
+                        apiKey: "YOUR_API_KEY",
+                        projectId: "YOUR_PROJECT_ID",
+                        messagingSenderId: "YOUR_SENDER_ID",
+                        appId: "YOUR_APP_ID"
+                    };
+                    
+                    firebase.initializeApp(firebaseConfig);
+                    const messaging = firebase.messaging();
+                    
+                    messaging.getToken({vapidKey: "YOUR_VAPID_KEY"})
+                        .then(token => console.log('FCM Token:', token))
+                        .catch(err => console.error('FCM Error:', err));
+                }
+            });
+        });
+}
 
+// دالة لإرسال الإشعارات
+function sendPrayerNotification(prayerName, time) {
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.ready.then(registration => {
+            registration.showNotification(`حان وقت صلاة ${prayerName}`, {
+                body: `الوقت الآن: ${time}`,
+                icon: 'icon-512.png',
+                badge: 'badge.png'
+            });
+        });
+    }
+}
+
+// دالة لتشغيل الإشعارات في الخلفية
+function schedulePrayerNotifications(prayerTimes) {
+    prayerTimes.forEach(prayer => {
+        const [hours, minutes] = prayer.time.split(':').map(Number);
+        const now = new Date();
+        const targetTime = new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate(),
+            hours,
+            minutes
+        );
+        
+        const timeDiff = targetTime - now;
+        if (timeDiff > 0) {
+            setTimeout(() => {
+                sendPrayerNotification(prayer.name, prayer.time);
+            }, timeDiff);
+        }
+    });
+}
 </script>
+<script src="main.js"></script>
 
 </body>
 </html>
