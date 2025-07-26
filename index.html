@@ -6135,6 +6135,22 @@ document.addEventListener("DOMContentLoaded", function () {
         update();
     }
 });
+// طلب الإذن بعد تفاعل المستخدم
+document.getElementById('notifyBtn').addEventListener('click', () => {
+  Notification.requestPermission().then(permission => {
+    if(permission === 'granted') initNotifications();
+  });
+});
+// إضافة زر تشغيل واضح
+<button id="athanPlayBtn" class="btn">
+  <i class="fas fa-play"></i> تشغيل الأذان
+</button>
+
+// في JS
+document.getElementById('athanPlayBtn').addEventListener('click', () => {
+  const audio = document.getElementById('athanAudio');
+  audio.play().catch(e => alert("الرجاء الضغط على زر التشغيل"));
+});
 </script>
 
 </body>
