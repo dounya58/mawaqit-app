@@ -9,7 +9,7 @@
     <meta name="description" content="تطبيق  مَوَاقِيتُ الإِيْمَان الإسلامي الشامل - مواقيت الصلاة، الأذكار، الأحاديث، القرآن، الزواج، التربية">
     <title>  مَوَاقِيتُ الإِيْمَان- تطبيقك الإسلامي الشامل</title>
   <link rel="icon" type="image/png" href="icon-512.png">
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/moment-hijri@2.1.2/moment-hijri.min.js"></script>
@@ -1344,7 +1344,614 @@
         font-size: 1.1rem;
     }
 }
+/* أنماط قسم القبلة */
+.qibla-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 30px;
+}
 
+.compass {
+    width: 280px;
+    height: 280px;
+    position: relative;
+}
+
+.compass-circle {
+    width: 100%;
+    height: 100%;
+    border: 3px solid var(--dark-gold);
+    border-radius: 50%;
+    position: relative;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+    background: var(--white);
+}
+
+.direction {
+    position: absolute;
+    font-weight: bold;
+    color: var(--dark-gold);
+    font-size: 1.4rem;
+}
+
+.direction:nth-child(1) { top: 10px; left: 50%; transform: translateX(-50%); } /* N */
+.direction:nth-child(2) { top: 50%; right: 10px; transform: translateY(-50%); } /* E */
+.direction:nth-child(3) { bottom: 10px; left: 50%; transform: translateX(-50%); } /* S */
+.direction:nth-child(4) { top: 50%; left: 10px; transform: translateY(-50%); } /* W */
+
+.kaaba-arrow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3.5rem;
+    color: var(--dark-gold);
+    transition: transform 0.5s ease;
+    z-index: 10;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.compass-needle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80%;
+    height: 3px;
+    background: var(--gold);
+    transform-origin: left center;
+    z-index: 5;
+}
+
+.qibla-info {
+    text-align: center;
+    background: var(--off-white);
+    padding: 20px;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.qibla-location {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--dark-gold);
+}
+
+.qibla-angle {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+}
+
+.qibla-instruction {
+    font-size: 1rem;
+    color: #666;
+    font-style: italic;
+}
+
+.qibla-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.qibla-explanation {
+    background: var(--off-white);
+    padding: 25px;
+    border-radius: 20px;
+    margin-top: 30px;
+    border-left: 4px solid var(--gold);
+}
+
+.qibla-explanation h3 {
+    color: var(--dark-gold);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* التأكد من أن الأيقونة موجودة */
+.fa-kaaba:before {
+    content: "\f66b"; /* رمز أيقونة الكعبة في FontAwesome */
+}
+/* تنسيقات قسم تعزيز العلاقات */
+.relations-section {
+    padding: 80px 20px;
+    background: linear-gradient(135deg, #faf8f0 0%, #fffdf9 100%);
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23f8f8f8" opacity="0.3"/><path d="M20,20 Q50,10 80,20 T100,50 T80,80 T50,90 T20,80 T0,50 T20,20 Z" fill="none" stroke="%23D4AF37" stroke-width="0.5" opacity="0.15"/></svg>');
+}
+
+.section-header {
+    text-align: center;
+    padding: 40px 20px;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.section-header::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px;
+    height: 4px;
+    background: linear-gradient(90deg, #D4AF37, #B8860B);
+    border-radius: 10px;
+}
+
+.section-icon {
+    width: 80px;
+    height: 80px;
+    background: #D4AF37;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    box-shadow: 0 6px 15px rgba(212, 175, 55, 0.3);
+}
+
+.section-icon i {
+    font-size: 2.5rem;
+    color: #FFFFFF;
+}
+
+.section-title {
+    font-size: 2.8rem;
+    color: #B8860B;
+    margin-bottom: 15px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.section-subtitle {
+    font-size: 1.3rem;
+    color: #555;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.8;
+}
+
+.pillars-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin: 50px 0;
+}
+
+.pillar-card {
+    background: #FFFFFF;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s ease;
+    position: relative;
+    border-top: 5px solid #D4AF37;
+}
+
+.pillar-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.pillar-header {
+    background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+    color: #FFFFFF;
+    padding: 25px 20px;
+    text-align: center;
+}
+
+.pillar-header i {
+    font-size: 2.8rem;
+    margin-bottom: 15px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.pillar-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.pillar-content {
+    padding: 30px;
+}
+
+.pillar-list {
+    list-style: none;
+}
+
+.pillar-list li {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px dashed #F5E7A1;
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.pillar-list li:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.pillar-list li i {
+    color: #D4AF37;
+    font-size: 1.4rem;
+    min-width: 30px;
+    padding-top: 5px;
+}
+
+.pillar-text h4 {
+    color: #B8860B;
+    margin-bottom: 8px;
+    font-size: 1.3rem;
+}
+
+.pillar-text p {
+    color: #555;
+    line-height: 1.7;
+}
+
+.daily-challenge {
+    background: linear-gradient(135deg, #fffdf5 0%, #fff9e6 100%);
+    border-radius: 20px;
+    padding: 40px;
+    margin: 60px 0;
+    text-align: center;
+    border: 2px solid #F5E7A1;
+    position: relative;
+    overflow: hidden;
+}
+
+.daily-challenge::before {
+    content: "";
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 150px;
+    height: 150px;
+    background: #F5E7A1;
+    border-radius: 50%;
+    opacity: 0.1;
+}
+
+.challenge-title {
+    color: #B8860B;
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.challenge-content {
+    background: #FFFFFF;
+    border-radius: 15px;
+    padding: 30px;
+    max-width: 700px;
+    margin: 0 auto;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid #F5E7A1;
+}
+
+.challenge-description {
+    font-size: 1.3rem;
+    margin-bottom: 25px;
+    color: #444;
+    line-height: 1.8;
+}
+
+.benefits {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin: 25px 0;
+}
+
+.benefit {
+    background: #F5E7A1;
+    padding: 12px 25px;
+    border-radius: 30px;
+    font-weight: 500;
+    color: #1a1a1a;
+}
+
+.challenge-btn {
+    background: #D4AF37;
+    color: #FFFFFF;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 30px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 1.1rem;
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+    margin: 20px 10px;
+}
+
+.challenge-btn:hover {
+    background: #B8860B;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);
+}
+
+.inspirational-quotes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin: 60px 0;
+}
+
+.quote-card {
+    background: #FFFFFF;
+    border-radius: 20px;
+    padding: 40px 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    position: relative;
+    border-left: 5px solid #D4AF37;
+    transition: all 0.4s ease;
+}
+
+.quote-card:hover {
+    transform: scale(1.02);
+}
+
+.quote-card::before {
+    content: "";
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    font-size: 6rem;
+    color: #F5E7A1;
+    opacity: 0.5;
+    font-family: serif;
+    line-height: 1;
+}
+
+.quote-text {
+    font-size: 1.3rem;
+    font-style: italic;
+    color: #444;
+    line-height: 1.9;
+    margin-bottom: 25px;
+    position: relative;
+    z-index: 2;
+}
+
+.quote-author {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+    z-index: 2;
+}
+
+.author-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #F5E7A1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #B8860B;
+    font-size: 1.5rem;
+}
+
+.author-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.author-name {
+    font-weight: bold;
+    color: #1a1a1a;
+}
+
+.author-title {
+    color: #D4AF37;
+    font-size: 0.95rem;
+}
+
+.quick-tips {
+    background: linear-gradient(135deg, #FFFFFF 0%, #F8F8F8 100%);
+    border-radius: 20px;
+    padding: 50px;
+    margin: 60px 0;
+    border: 1px solid #F5E7A1;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.tips-title {
+    text-align: center;
+    font-size: 2.2rem;
+    color: #B8860B;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+}
+
+.tip-card {
+    background: #FFFFFF;
+    border-radius: 15px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.4s ease;
+    border: 1px solid #F5E7A1;
+}
+
+.tip-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border-color: #D4AF37;
+}
+
+.tip-icon {
+    width: 70px;
+    height: 70px;
+    background: #F5E7A1;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 1.8rem;
+    color: #B8860B;
+}
+
+.tip-title {
+    color: #B8860B;
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+}
+
+.tip-description {
+    color: #555;
+    line-height: 1.7;
+}
+
+.reflection-section {
+    background: linear-gradient(135deg, #fefcf5 0%, #fffbf0 100%);
+    border-radius: 20px;
+    padding: 50px;
+    margin: 60px 0;
+    text-align: center;
+    border: 1px solid #F5E7A1;
+    position: relative;
+    overflow: hidden;
+}
+
+.reflection-title {
+    color: #B8860B;
+    font-size: 2.2rem;
+    margin-bottom: 40px;
+}
+
+.reflection-content {
+    max-width: 800px;
+    margin: 0 auto;
+    font-size: 1.3rem;
+    line-height: 1.9;
+    color: #444;
+    margin-bottom: 40px;
+}
+
+.questions-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    margin-top: 40px;
+}
+
+.question-card {
+    background: #FFFFFF;
+    border-radius: 15px;
+    padding: 30px;
+    text-align: right;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid #F5E7A1;
+    transition: all 0.4s ease;
+}
+
+.question-card:hover {
+    transform: translateY(-5px);
+    border-color: #D4AF37;
+}
+
+.question-card i {
+    color: #D4AF37;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+.question-text {
+    font-size: 1.2rem;
+    color: #444;
+    line-height: 1.8;
+}
+
+.conclusion {
+    text-align: center;
+    padding: 40px 20px;
+    margin-top: 40px;
+    background: linear-gradient(135deg, #F5E7A1 0%, rgba(245, 231, 161, 0.3) 100%);
+    border-radius: 20px;
+}
+
+.conclusion-title {
+    font-size: 2.2rem;
+    color: #B8860B;
+    margin-bottom: 25px;
+}
+
+.conclusion-text {
+    font-size: 1.3rem;
+    color: #555;
+    max-width: 800px;
+    margin: 0 auto 30px;
+    line-height: 1.9;
+}
+
+.final-quote {
+    font-size: 1.5rem;
+    font-style: italic;
+    color: #B8860B;
+    margin-top: 30px;
+    padding: 20px;
+    border-top: 2px dashed #D4AF37;
+    display: inline-block;
+}
+
+/* التكيف مع الأجهزة المحمولة */
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 2.2rem;
+    }
+    
+    .section-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .pillars-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .daily-challenge, 
+    .quick-tips,
+    .reflection-section {
+        padding: 30px 20px;
+    }
+    
+    .challenge-description {
+        font-size: 1.1rem;
+    }
+    
+    .quick-tips {
+        padding: 30px 15px;
+    }
+}
     </style>
 </head>
 <body>
@@ -1375,6 +1982,9 @@
             <div class="tab active" data-target="prayer-times">
                 <i class="fas fa-clock"></i> أوقات الصلاة
             </div>
+             <div class="tab" data-target="qiblah">
+                <i class="fas fa-compass"></i> القبلة
+            </div>
             <div class="tab" data-target="azkar">
                 <i class="fas fa-praying-hands"></i> الأذكار
             </div>
@@ -1383,6 +1993,12 @@
             </div>
             <div class="tab" data-target="hadith">
                 <i class="fas fa-book"></i> الحديث اليومي
+            </div>
+            <div class="tab" data-target="myway">
+                <i class="fas fa-road"></i> طريقي الى الله
+            </div>
+             <div class="tab" data-target="taziz">
+                <i class="fas fa-hand-holding-heart"></i> تعزيز العلاقات 
             </div>
             <div class="tab" data-target="marriage">
                 <i class="fas fa-ring"></i> نصائح الزواج
@@ -1516,7 +2132,438 @@
                 </div>
             </div>
         </div>
+        <div id="qiblah" class="content-section">
+    <h2 class="section-title">
+        <i class="fas fa-compass"></i> اتجاه القبلة
+    </h2>
+    
+    <div class="qibla-container">
+        <!-- البوصلة -->
+        <div class="compass">
+            <div class="compass-circle">
+                <div class="direction">N</div>
+                <div class="direction">E</div>
+                <div class="direction">S</div>
+                <div class="direction">W</div>
+                <div class="kaaba-arrow" id="qiblaArrow">
+                    <i class="fas fa-kaaba"></i>
+                </div>
+                <div class="compass-needle"></div>
+            </div>
+        </div>
         
+        <!-- معلومات القبلة -->
+        <div class="qibla-info">
+            <div class="qibla-location" id="qiblaLocation">
+                جاري تحديد موقعك...
+            </div>
+            <div class="qibla-angle" id="qiblaAngle">
+                جاري حساب اتجاه القبلة...
+            </div>
+            <div class="qibla-instruction">
+                <i class="fas fa-info-circle"></i> ثبت جهازك أفقيًا للحصول على قراءة دقيقة
+            </div>
+        </div>
+    </div>
+    
+    <!-- اختيار الولاية -->
+
+    
+    <!-- اختيار الولاية -->
+    <div class="qibla-controls">
+        <select id="qibla-wilaya-select" class="form-control">
+            <option value="">-- اختر ولايتك --</option>
+            <!-- الولايات الجزائرية كاملة (58 ولاية) -->
+            <option value="36.752887,3.042048">الجزائر العاصمة</option>
+            <option value="36.462140,2.738730">البليدة</option>
+            <option value="36.267500,2.750000">المدية</option>
+            <option value="36.365000,4.895000">برج بوعريريج</option>
+            <option value="36.619500,3.225400">بومرداس</option>
+            <option value="36.726200,4.049400">البويرة</option>
+            <option value="36.750000,4.916700">تيزي وزو</option>
+            <option value="36.820600,7.747200">الطارف</option>
+            <option value="36.460000,7.427800">سوق السبت</option>
+            <option value="36.365300,6.614700">ميلة</option>
+            <option value="36.365268,6.614702">قسنطينة</option>
+            <option value="36.191200,5.413700">سطيف</option>
+            <option value="36.268300,7.434900">عين فكرون</option>
+            <option value="36.165400,1.334700">الشلف</option>
+            <option value="36.750839,5.056733">بجاية</option>
+            <option value="35.825400,7.111800">سكيكدة</option>
+            <option value="35.388900,8.120800">تبسة</option>
+            <option value="35.390000,8.140000">قالمة</option>
+            <option value="35.408100,7.143800">سوق أهراس</option>
+            <option value="35.598600,5.543300">خنشلة</option>
+            <option value="35.555970,6.174140">باتنة</option>
+            <option value="35.630000,5.911110">أم البواقي</option>
+            <option value="35.297500,1.028400">البيض</option>
+            <option value="35.189200,3.545000">الجلفة</option>
+            <option value="35.066700,1.050000">تيارت</option>
+            <option value="35.402200,-0.140800">سيدي بلعباس</option>
+            <option value="35.737220,0.555830">معسكر</option>
+            <option value="35.944100,0.090100">غليزان</option>
+            <option value="35.212200,4.187280">مسعد</option>
+            <option value="35.611100,-0.616700">سعيدة</option>
+            <option value="35.207830,2.311820">بوسعادة</option>
+            <option value="35.189200,3.545000">عين وسارة</option>
+            <option value="34.861400,-1.339000">سيدي بلعباس</option>
+            <option value="34.850000,-1.333300">عين تموشنت</option>
+            <option value="34.878300,-1.315000">تلمسان</option>
+            <option value="34.154400,3.503090">الأغواط</option>
+            <option value="33.803300,2.865200">الوادي</option>
+            <option value="33.367900,6.867500">ورقلة</option>
+            <option value="33.116700,6.083300">تقرت</option>
+            <option value="32.487400,3.677500">غرداية</option>
+            <option value="31.616700,-2.216700">بشار</option>
+            <option value="27.874200,-0.293800">أدرار</option>
+            <option value="29.233300,0.283300">تيميمون</option>
+            <option value="26.500000,8.466700">إليزي</option>
+            <option value="22.789000,5.522700">تمنراست</option>
+            <option value="35.931100,0.089200">غليزان</option>
+            <option value="36.907657,7.767120">عنابة</option>
+            <option value="35.697654,0.635773">وهران</option>
+            <option value="35.700000,0.150000">مستغانم</option>
+            <option value="35.212200,4.187280">المسيلة</option>
+            <option value="35.402200,-0.140800">سعيدة</option>
+            <option value="34.154400,3.503090">الأغواط</option>
+            <option value="35.189200,3.545000">الجلفة</option>
+            <option value="35.598600,5.543300">خنشلة</option>
+            <option value="35.408100,7.143800">سوق أهراس</option>
+            <option value="36.263000,6.693600">ميلة</option>
+            <option value="35.297500,1.028400">البيض</option>
+            <option value="33.803300,2.865200">الوادي</option>
+            <option value="33.367900,6.867500">ورقلة</option>
+            <option value="31.616700,-2.216700">بشار</option>
+            <option value="27.874200,-0.293800">أدرار</option>
+            <option value="36.267500,2.750000">البليدة</option>
+            <option value="35.737220,0.555830">وهران</option>
+            <option value="36.365268,6.614702">قسنطينة</option>
+            <option value="36.907657,7.767120">عنابة</option>
+            <option value="36.750839,5.056733">بجاية</option>
+            <option value="35.555970,6.174140">باتنة</option>
+            <option value="36.191200,5.413700">سطيف</option>
+            <option value="34.878300,-1.315000">تلمسان</option>
+            <option value="36.165400,1.334700">الشلف</option>
+            <option value="32.487400,3.677500">غرداية</option>
+        </select>
+        <button class="btn" id="qibla-btn">
+            <i class="fas fa-location-arrow"></i> تحديث الاتجاه
+        </button>
+    </div>
+
+    
+    <div class="qibla-explanation">
+        <h3><i class="fas fa-lightbulb"></i> كيف تعمل بوصلة القبلة؟</h3>
+        <p>تقوم البوصلة باستخدام بيانات الجوال لتحديد اتجاه القبلة في مكة المكرمة. عند تثبيت الجهاز أفقيًا، يظهر سهم الكعبة الاتجاه الصحيح للصلاة.</p>
+    </div>
+</div>
+  <div class="container">
+    <div id="taziz" class="content-section">
+  <div class="container">
+        <!-- ترويسة القسم -->
+            <div class="section-icon">
+                <i class="fas fa-people-arrows"></i>
+                
+            </div>
+            <h1 class="section-title">تعزيز العلاقات</h1>
+            <p class="section-subtitle">
+                رحلة نحو اتصال أعمق وروابط أوثق في حياتك. استكشف أسرار بناء علاقات قوية مع الله، نفسك، أسرتك، ومجتمعك.
+            </p>
+        </div>
+        <!-- أعمدة العلاقات الأساسية -->
+        <div class="pillars-container">
+            <!-- العلاقة مع الله -->
+            <div class="pillar-card">
+                <div class="pillar-header">
+                    <i class="fas fa-pray"></i>
+                    <h3 class="pillar-title">العلاقة مع الله</h3>
+                </div>
+                <div class="pillar-content">
+                    <ul class="pillar-list">
+                        <li>
+                            <i class="fas fa-heart"></i>
+                            <div class="pillar-text">
+                                <h4>الصلاة بخشوع</h4>
+                                <p>اجعل صلاتك لقاءً يومياً مع الله، تناجيه وتستشعر قربه، لا مجرد حركات تؤديها.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-hands-praying"></i>
+                            <div class="pillar-text">
+                                <h4>الدعاء المستمر</h4>
+                                <p>حول حياتك إلى مناجاة دائمة، شارك الله همومك وأحلامك وأصغر تفاصيل حياتك.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-book-quran"></i>
+                            <div class="pillar-text">
+                                <h4>تدبر القرآن</h4>
+                                <p>عند قراءتك للقرآن، تخيل أن الله يخاطبك شخصياً بكل آية، واستشعر عظمة هذا الخطاب.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-star"></i>
+                            <div class="pillar-text">
+                                <h4>الصدقة الخفية</h4>
+                                <p>اجعل بينك وبين الله سراً من الصدقات، تشعر من خلالها بحلاوة الإخلاص.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- العلاقة مع النفس -->
+            <div class="pillar-card">
+                <div class="pillar-header">
+                    <i class="fas fa-user"></i>
+                    <h3 class="pillar-title">العلاقة مع النفس</h3>
+                </div>
+                <div class="pillar-content">
+                    <ul class="pillar-list">
+                        <li>
+                            <i class="fas fa-brain"></i>
+                            <div class="pillar-text">
+                                <h4>التصالح مع الذات</h4>
+                                <p>تقبل عيوبك وقدر نقاط ضعفك، فالكمال لله وحده، واعمل على تطوير نفسك بلطف وصبر.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-seedling"></i>
+                            <div class="pillar-text">
+                                <h4>النمو المستمر</h4>
+                                <p>خصص وقتاً يومياً للتعلم والتطوير، وليكن شعارك "اليوم أفضل من الأمس".</p>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-balance-scale"></i>
+                            <div class="pillar-text">
+                                <h4>التوازن الداخلي</h4>
+                                <p>وازن بين احتياجات جسدك وعقلك وروحك، ولا تهمل جانباً على حساب الآخر.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-gem"></i>
+                            <div class="pillar-text">
+                                <h4>اكتشاف المواهب</h4>
+                                <p>استكشف مواهبك الفريدة واستثمرها، فلكل إنسان بصمة خاصة في الكون.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- العلاقة مع الأسرة -->
+            <div class="pillar-card">
+                <div class="pillar-header">
+                    <i class="fas fa-home"></i>
+                    <h3 class="pillar-title">العلاقة مع الأسرة</h3>
+                </div>
+                <div class="pillar-content">
+                    <ul class="pillar-list">
+                        <li>
+                            <i class="fas fa-comments"></i>
+                            <div class="pillar-text">
+                                <h4>حوار القلوب</h4>
+                                <p>اجلس مع أسرتك يومياً دون شاشات، استمع بقلبك قبل أذنيك، وشاركهم مشاعرك.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-laugh-beam"></i>
+                            <div class="pillar-text">
+                                <h4>نشر البهجة</h4>
+                                <p>كن مصدراً للفرح في بيتك، فالضحك والمرح يجدد الروابط ويذيب الجليد.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-hands-helping"></i>
+                            <div class="pillar-text">
+                                <h4>الدعم العاطفي</h4>
+                                <p>كن الملاذ الآمن لأفراد أسرتك، وقدم لهم الدعم دون شروط أو أحكام.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-history"></i>
+                            <div class="pillar-text">
+                                <h4>الوقت النوعي</h4>
+                                <p>خصص وقتاً مميزاً لكل فرد من أسرتك، يشعر فيه بأنه الأهم في حياتك.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- التحدي اليومي -->
+        <div class="daily-challenge">
+            <h2 class="challenge-title">
+                <i class="fas fa-trophy"></i> تحدي اليوم
+            </h2>
+            <div class="challenge-content">
+                <p class="challenge-description">
+                    اختر شخصاً واحداً من دائرة معارفك (صديق، قريب، زميل) وأرسل له رسالة غير متوقعة تعبر فيها عن تقديرك له، واذكر صفة واحدة تحبها فيه وذكرى جميلة شاركتماها.
+                </p>
+                
+                <div class="benefits">
+                    <div class="benefit">تعزيز الثقة</div>
+                    <div class="benefit">نشر الطاقة الإيجابية</div>
+                    <div class="benefit">تقوية الروابط</div>
+                    <div class="benefit">زيادة السعادة</div>
+                </div>
+                
+                <button class="challenge-btn" onclick="acceptChallenge()">
+  <i class="fas fa-check-circle"></i> قبلت التحدي
+</button>
+<button class="challenge-btn" style="background: #8B4513;" onclick="newChallenge()">
+  <i class="fas fa-random"></i> تحدٍ آخر
+</button>
+            </div>
+        </div>
+        
+        <!-- نصائح سريعة -->
+        <div class="quick-tips">
+            <h2 class="tips-title">
+                <i class="fas fa-lightbulb"></i> نصائح سريعة لعلاقات أفضل
+            </h2>
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <div class="tip-icon">
+                        <i class="fas fa-ear-listen"></i>
+                    </div>
+                    <h3 class="tip-title">الاستماع الفعال</h3>
+                    <p class="tip-description">
+                        عندما تتحدث مع شخص، أعطه كامل انتباهك. استمع بعينيك وقلبك، لا فقط بأذنيك.
+                    </p>
+                </div>
+                
+                <div class="tip-card">
+                    <div class="tip-icon">
+                        <i class="fas fa-hand-holding-heart"></i>
+                    </div>
+                    <h3 class="tip-title">لغة الامتنان</h3>
+                    <p class="tip-description">
+                        عبر عن امتنانك للآخرين بانتظام. كلمة شكر صادقة قد تغير يوم شخص بالكامل.
+                    </p>
+                </div>
+                
+                <div class="tip-card">
+                    <div class="tip-icon">
+                        <i class="fas fa-user-clock"></i>
+                    </div>
+                    <h3 class="tip-title">الوقت الجيد</h3>
+                    <p class="tip-description">
+                        الجودة أهم من الكمية. 15 دقيقة من التواصل الحقيقي أفضل من ساعات من التواجد الجسدي فقط.
+                    </p>
+                </div>
+                
+                <div class="tip-card">
+                    <div class="tip-icon">
+                        <i class="fas fa-heart-crack"></i>
+                    </div>
+                    <h3 class="tip-title">التسامح</h3>
+                    <p class="tip-description">
+                        تعلم أن تسامح وتتجاوز عن الزلات. لا تحمل الضغائن، فهي ثقيلة على القلب والعلاقة.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- أقوال ملهمة -->
+        <div class="inspirational-quotes">
+            <div class="quote-card">
+                <p class="quote-text">
+                    "أفضل طريقة لتقدير علاقاتك هي أن تستثمر فيها بصدق، وترويها بلطف، وتحميها من رياح الإهمال"
+                </p>
+                <div class="quote-author">
+                    <div class="author-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="author-info">
+                        <div class="author-name">د. أحمد خالد</div>
+                        <div class="author-title">اختصاصي العلاقات الأسرية</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="quote-card">
+                <p class="quote-text">
+                    "العلاقات الناجحة ليست تلك التي لا تعرف المشاكل، بل تلك التي يمتلك أصحابها مهارة تحويل المشاكل إلى فرص للنمو"
+                </p>
+                <div class="quote-author">
+                    <div class="author-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="author-info">
+                        <div class="author-name">أ. فاطمة الزهراء</div>
+                        <div class="author-title">مرشدة نفسية</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="quote-card">
+                <p class="quote-text">
+                    "أجمل هدية يمكن أن تقدمها لمن تحب: وقتك الكامل، انتباهك غير المنقسم، وقلبك المفتوح"
+                </p>
+                <div class="quote-author">
+                    <div class="author-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="author-info">
+                        <div class="author-name">د. محمد أمين</div>
+                        <div class="author-title">كاتب وباحث اجتماعي</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- قسم التأمل -->
+        <div class="reflection-section">
+            <h2 class="reflection-title">
+                <i class="fas fa-brain"></i> زاوية التأمل والتفكر
+            </h2>
+            
+            <p class="reflection-content">
+                خذ دقيقة للتفكر في علاقاتك. ما الذي يجعلها مميزة؟ كيف يمكن أن تجعلها أكثر متانة؟ استخدم هذه الأسئلة كمرشد لرحلة تطوير علاقاتك.
+            </p>
+            
+            <div class="questions-container">
+                <div class="question-card">
+                    <i class="fas fa-question-circle"></i>
+                    <p class="question-text">
+                        ما هي أقوى علاقة في حياتي الآن؟ وما الذي يجعلها مميزة؟
+                    </p>
+                </div>
+                
+                <div class="question-card">
+                    <i class="fas fa-question-circle"></i>
+                    <p class="question-text">
+                        ما الذي يمكنني فعله اليوم لتعزيز علاقتي مع شخص مهم في حياتي؟
+                    </p>
+                </div>
+                
+                <div class="question-card">
+                    <i class="fas fa-question-circle"></i>
+                    <p class="question-text">
+                        كيف يمكنني أن أكون صديقاً/زميلاً/قريباً أفضل لمن حولي؟
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- خاتمة -->
+        <div class="conclusion">
+            <h2 class="conclusion-title">كلمة أخيرة</h2>
+            <p class="conclusion-text">
+                العلاقات هي نسيج حياتنا الذي يمنحها المعنى والدفء. استثمر في علاقاتك بوعي وحكمة، واعلم أن كل جهد تبذله اليوم في تعزيزها سيعود عليك ببركات لا تحصى في دنياك وآخرتك.
+            </p>
+            
+            <div class="final-quote">
+                <i class="fas fa-quote-left"></i>
+                خير الناس أنفعهم للناس
+                <i class="fas fa-quote-right"></i>
+            </div>
+        </div>
+    </div>
+
         <!-- قسم الأذكار الموسع -->
         <div id="azkar" class="content-section">
             <h2 class="section-title">
@@ -2457,9 +3504,299 @@
         </p>
     </div>
 </div>
+
+<!-- قسم طريقي الى الله -->
+<div id="myway" class="content-section">
+    <h2 class="section-title">
+        <i class="fas fa-road"></i> طريقي إلى الله - المسار الروحي المتكامل
+    </h2>
+    
+    <div class="quran-guide">
+        <!-- مقدمة -->
+        <div class="guide-card">
+            <h3><i class="fas fa-compass"></i> بداية الرحلة</h3>
+            <p>قال تعالى: "وَمَنْ أَحْسَنُ قَوْلًا مِّمَّن دَعَا إِلَى اللَّهِ وَعَمِلَ صَالِحًا وَقَالَ إِنَّنِي مِنَ الْمُسْلِمِينَ" (فصلت: 33). هذه رحلتك الشخصية لتقوية صلتك بالله، ابدأها بنية صادقة وقلب مفتوح.</p>
+        </div>
+        <div class="guide-card">
+    <h3><i class="fas fa-heart-circle-check"></i> خطوات التوبة النصوح</h3>
+    <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+            <h4>الإقلاع الفوري عن الذنب</h4>
+            <p>ترك المعصية فوراً والندم على فعلها</p>
+        </div>
+    </div>
+    <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+            <h4>العزم على عدم العودة</h4>
+            <p>تحديد أسباب الوقوع في الذنب وتجنبها</p>
+        </div>
+    </div>
+    <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+            <h4>رد المظالم إلى أهلها</h4>
+            <p>إعادة الحقوق إلى أصحابها أو الاستحلال منهم</p>
+        </div>
+    </div>
+    <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+            <h4>الإكثار من الحسنات</h4>
+            <p>تعويض السيئات بالأعمال الصالحة</p>
+        </div>
+    </div>
+    <div class="step">
+        <div class="step-number">5</div>
+        <div class="step-content">
+            <h4>الدعاء والاستغفار</h4>
+            <p>"ربنا ظلمنا أنفسنا وإن لم تغفر لنا وترحمنا لنكونن من الخاسرين"</p>
+        </div>
+    </div>
+</div>
+<div class="guide-card">
+    <h3><i class="fas fa-hand-holding-heart"></i> أسس الالتزام المتين</h3>
+    <div class="method">
+        <h4><i class="fas fa-calendar-check"></i> الثبات على الواجبات</h4>
+        <p>المحافظة على الصلوات الخمس في وقتها</p>
+    </div>
+    <div class="method">
+        <h4><i class="fas fa-book-quran"></i> ورد قرآني يومي</h4>
+        <p>حفظ آية جديدة يومياً مع فهم معناها</p>
+    </div>
+    <div class="method">
+        <h4><i class="fas fa-people-group"></i> الصحبة الصالحة</h4>
+        <p>مصاحبة من يعينك على الطاعة ويذكرك بالله</p>
+    </div>
+    <div class="method">
+        <h4><i class="fas fa-scroll"></i> المحاسبة اليومية</h4>
+        <p>مراجعة الأعمال قبل النوم واستغلال وقت السحر</p>
+    </div>
+    <div class="dua">
+        <p>"رَبَّنَا أَفْرِغْ عَلَيْنَا صَبْرًا وَثَبِّتْ أَقْدَامَنَا"</p>
+        <p>(البقرة: 250)</p>
+    </div>
+</div>
+<div class="guide-card dua-card">
+    <h3><i class="fas fa-hands-praying"></i> أدعية التثبيت والثبات</h3>
+    <div class="dua">
+        <p>"يَا مُقَلِّبَ الْقُلُوبِ ثَبِّتْ قَلْبِي عَلَى دِينِكَ"</p>
+        <p>(رواه الترمذي)</p>
+    </div>
+    <div class="dua">
+        <p>"اللهم إني أسألك الثبات في الأمر والعزيمة على الرشد"</p>
+    </div>
+    <div class="dua">
+        <p>"اللهم مصرف القلوب صرف قلوبنا على طاعتك"</p>
+    </div>
+    <div class="dua">
+        <p>"رب اشرح لي صدري ويسر لي أمري واحلل عقدة من لساني"</p>
+        <p>(طه: 25-28)</p>
+    </div>
+</div><div class="method">
+    <h4><i class="fas fa-arrows-rotate"></i> العودة بعد الانتكاسة</h4>
+    <p><strong>الحل:</strong> 
+        - عدم اليأس من رحمة الله "قل يا عبادي الذين أسرفوا على أنفسهم لا تقنطوا من رحمة الله" (الزمر:53)<br>
+        - التوبة فوراً والاستغفار 100 مرة يومياً<br>
+        - مراجعة أسباب الوقوع وتجنبها
+    </p>
+</div>
+<div class="step">
+    <div class="step-number">0</div>
+    <div class="step-content">
+        <h4>مرحلة التطهير</h4>
+        <p>التوبة الصادقة والاستغفار 100 مرة يومياً لمدة 3 أيام</p>
+    </div>
+</div>
+<li><strong>دفتر التوبة:</strong> دوّن ذنوبك ثم مزّق الورقة بعد الاستغفار</li>
+<li><strong>تطبيق التسبيح:</strong> استخدم عداد الأذكار لتسجيل استغفاراتك اليومية</li>
+        <!-- مراحل المسار -->
+        <div class="guide-card">
+            <h3><i class="fas fa-road"></i> مراحل المسار الروحي</h3>
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>التوبة النصوح</h4>
+                    <p>البداية الحقيقية تكون بالتوبة الصادقة: "وَتُوبُوا إِلَى اللَّهِ جَمِيعًا أَيُّهَ الْمُؤْمِنُونَ لَعَلَّكُمْ تُفْلِحُونَ" (النور: 31).</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4>أركان الإسلام</h4>
+                    <p>إتقان الصلاة، الصيام، الزكاة والحج لمن استطاع.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h4>القرآن رفيق الدرب</h4>
+                    <p>ورد يومي للقرآن تلاوة وتدبراً: "كِتَابٌ أَنزَلْنَاهُ إِلَيْكَ مُبَارَكٌ لِّيَدَّبَّرُوا آيَاتِهِ" (ص: 29).</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h4>الذكر والدعاء</h4>
+                    <p>إحياء القلب بذكر الله والدعاء في الأسحار: "الَّذِينَ يَذْكُرُونَ اللَّهَ قِيَامًا وَقُعُودًا وَعَلَىٰ جُنُوبِهِمْ" (آل عمران: 191).</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <h4>تزكية النفس</h4>
+                    <p>محاسبة النفس ومجاهدة الهوى: "وَنَفْسٍ وَمَا سَوَّاهَا * فَأَلْهَمَهَا فُجُورَهَا وَتَقْوَاهَا * قَدْ أَفْلَحَ مَن زَكَّاهَا" (الشمس: 7-9).</p>
+                </div>
+            </div>
+        </div>
         
+        <!-- أدوات عملية -->
+        <div class="guide-card">
+            <h3><i class="fas fa-tools"></i> أدوات عملية للطريق</h3>
+            <ul>
+                <li><strong>مصحف الجيب:</strong> احمله معك دائماً للقراءة في أوقات الانتظار</li>
+                <li><strong>تطبيق الأذكار:</strong> استخدم خاصية التذكير في هذا التطبيق</li>
+                <li><strong>دفتر المحاسبة:</strong> دوّن أخطائك وتوبتك وتطورك الروحي</li>
+                <li><strong>صحبة صالحة:</strong> رافق من يذكرك بالله ويرشدك للخير</li>
+                <li><strong>وقت الخلوة:</strong> 10 دقائق يومياً للتفكر والمناجاة</li>
+            </ul>
+        </div>
+        
+        <!-- التحديات والحلول -->
+        <div class="guide-card">
+            <h3><i class="fas fa-exclamation-triangle"></i> تحديات الطريق وحلولها</h3>
+            <div class="method">
+                <h4><i class="fas fa-heart-broken"></i> ضعف الهمة</h4>
+                <p><strong>الحل:</strong> قراءة سير الصالحين، البدء بأعمال صغيرة، الدعاء: "اللهم إني أعوذ بك من العجز والكسل"</p>
+            </div>
+            <div class="method">
+                <h4><i class="fas fa-distractions"></i> كثرة المشاغل</h4>
+                <p><strong>الحل:</strong> ترتيب الأولويات، الاستيقاظ قبل الفجر، استغلال أوقات الانتظار</p>
+            </div>
+            <div class="method">
+                <h4><i class="fas fa-repeat"></i> العودة للذنب</h4>
+                <p><strong>الحل:</strong> عدم اليأس، التوبة مباشرة، معرفة أسباب الوقوع وتجنبها</p>
+            </div>
+        </div>
+        
+        <!-- قصص نجاح -->
+        <div class="guide-card">
+            <h3><i class="fas fa-star"></i> قصص تحول ملهمة</h3>
+            <div class="method">
+                <h4><i class="fas fa-user"></i> عمر بن الخطاب</h4>
+                <p>من أشد المعادين للإسلام إلى خليفة للمسلمين وقائد للأمة</p>
+            </div>
+            <div class="method">
+                <h4><i class="fas fa-user"></i> الفضيل بن عياض</h4>
+                <p>من قاطع طرق إلى عالم وزاهد تتلمذ على يديه كبار العلماء</p>
+            </div>
+            <div class="method">
+                <h4><i class="fas fa-user"></i> مالك بن دينار</h4>
+                <p>من شرطي فاسد إلى أحد أئمة التابعين الزهاد</p>
+            </div>
+        </div>
+        
+        <!-- ورد يومي -->
+        <div class="guide-card">
+            <h3><i class="fas fa-tasks"></i> الورد اليومي الموصى به</h3>
+            <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                <tr style="background-color: var(--light-gold);">
+                    <th style="padding: 10px; text-align: right;">العمل</th>
+                    <th style="padding: 10px; text-align: center;">الكمية</th>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border-bottom: 1px solid var(--light-gold);">تلاوة القرآن</td>
+                    <td style="padding: 10px; border-bottom: 1px solid var(--light-gold); text-align: center;">1 وجه على الأقل</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border-bottom: 1px solid var(--light-gold);">أذكار الصباح والمساء</td>
+                    <td style="padding: 10px; border-bottom: 1px solid var(--light-gold); text-align: center;">يومياً</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border-bottom: 1px solid var(--light-gold);">قيام الليل</td>
+                    <td style="padding: 10px; border-bottom: 1px solid var(--light-gold); text-align: center;">ركعتين على الأقل</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border-bottom: 1px solid var(--light-gold);">الصدقة</td>
+                    <td style="padding: 10px; border-bottom: 1px solid var(--light-gold); text-align: center;">ولو قليلاً</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px;">الدعاء</td>
+                    <td style="padding: 10px; text-align: center;">خاصة في السجود والأسحار</td>
+                </tr>
+            </table>
+        </div>
+        
+        <!-- خطة 40 يوم -->
+        <div class="guide-card">
+            <h3><i class="fas fa-calendar-check"></i> خطة 40 يوم لتغيير النفس</h3>
+            <div class="step">
+                <div class="step-number">1-10</div>
+                <div class="step-content">
+                    <h4>مرحلة التأسيس</h4>
+                    <p>المحافظة على الصلوات في وقتها، قراءة ورد يومي من القرآن، المحافظة على أذكار الصباح والمساء</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">11-20</div>
+                <div class="step-content">
+                    <h4>مرحلة البناء</h4>
+                    <p>إضافة قيام الليل، الصدقة اليومية، قراءة سيرة النبي ﷺ، بدء محاسبة النفس</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">21-30</div>
+                <div class="step-content">
+                    <h4>مرحلة التعميق</h4>
+                    <p>زيادة ورد القرآن، الدعاء في الأسحار، صيام الاثنين والخميس، البحث عن صحبة صالحة</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">31-40</div>
+                <div class="step-content">
+                    <h4>مرحلة التمكين</h4>
+                    <p>المحافظة على المكتسبات، البدء بنشر الخير، تعليم الآخرين، وضع خطة للمستقبل</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- نهاية المسار -->
+        <div class="guide-card dua-card">
+            <h3><i class="fas fa-flag-checkered"></i> نهاية الطريق</h3>
+            <div class="dua">
+                <p>"رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ"</p>
+                <p>(البقرة: 201)</p>
+            </div>
+            <p style="margin-top: 15px;">قال رسول الله ﷺ: "إذا سألتم الله فاسألوه الفردوس، فإنه أوسط الجنة وأعلى الجنة، وفوقه عرش الرحمن، ومنه تفجر أنهار الجنة" (رواه البخاري).</p>
+        </div>
+    </div>
+</div>     
         <!-- قسم نصائح للمقبلين على الزواج -->
-        <div id="marriage" class="content-section">
+        
+<!-- START: تعزيز العلاقات section -->
+<div class="content-section" id="taziz">
+    <h2 class="section-title">
+        <i class="fas fa-hand-holding-heart"></i> تعزيز العلاقات
+    </h2>
+    <div class="tips-container">
+        <div class="tip-card">
+            <h3><i class="fas fa-heart"></i> أهمية الكلمة الطيبة</h3>
+            <p>الكلمة الطيبة صدقة، وهي مفتاح للعلاقات الطيبة بين الناس، فلتكن دائمًا كلماتك مبعثًا للسلام والمحبة.</p>
+        </div>
+        <div class="tip-card">
+            <h3><i class="fas fa-hands-helping"></i> افعل الخير دون انتظار</h3>
+            <p>مد يد العون للغير يعزز الثقة ويقوي الروابط. العلاقات الناجحة تُبنى على العطاء دون مقابل.</p>
+        </div>
+        <div class="tip-card">
+            <h3><i class="fas fa-users"></i> الاستماع بإنصات</h3>
+            <p>الاستماع الجيد يُشعر الطرف الآخر بالتقدير. لا تقاطع واهتم بما يقال.</p>
+        </div>
+    </div>
+</div>
+<!-- END: تعزيز العلاقات section -->
+
+<div id="marriage" class="content-section">
             <h2 class="section-title">
 <!-- ✅ عرض التاريخ الميلادي والهجري -->
 
@@ -3071,8 +4408,8 @@
             <h3><i class="fas fa-code"></i> معلومات التطوير</h3>
             <p>
                 <strong>الإصدار:</strong> 1.5.0<br>
-                <strong>تاريخ الإصدار:</strong> 21 جويلية 2025<br>
-                <strong>المطور:</strong> فريق مواقيت الإيمان<br>
+                <strong>تاريخ الإصدار:</strong> 27 جويلية 2025<br>
+                <strong>المطور:</strong> دنيا <br>
                 <strong>الترخيص:</strong> مجاني للاستخدام الشخصي
             </p>
         </div>
@@ -3115,6 +4452,7 @@
         </div>
     </div>
 </div>
+<script src="main.js"></script>
 
    <script>
      
@@ -4001,6 +5339,7 @@ const hadithsWithExplanation = [
     }
 ];
 
+
 let currentHadithIndex = 0;
 
 function showHadith(index) {
@@ -4546,9 +5885,257 @@ function schedulePrayerNotifications(prayerTimes) {
             }, timeDiff);
         }
     });
+}// ==== بوصلة القبلة ====
+document.addEventListener('DOMContentLoaded', function() {
+    const qiblaArrow = document.getElementById('qiblaArrow');
+    const qiblaLocation = document.getElementById('qiblaLocation');
+    const qiblaAngle = document.getElementById('qiblaAngle');
+    const wilayaSelect = document.getElementById('qibla-wilaya-select');
+    const qiblaBtn = document.getElementById('qibla-btn');
+    
+    // إحداثيات الكعبة المشرفة
+    const KAABA_COORDS = {
+        lat: 21.422487,
+        lng: 39.826206
+    };
+    
+    // بيانات الولايات الجزائرية
+    const algeriaWilayas = {
+        "الجزائر العاصمة": { lat: 36.752887, lng: 3.042048 },
+        "وهران": { lat: 35.697654, lng: 0.635773 },
+        "قسنطينة": { lat: 36.365268, lng: 6.614702 },
+        "عنابة": { lat: 36.907657, lng: 7.767120 },
+        "بجاية": { lat: 36.750839, lng: 5.056733 },
+        "باتنة": { lat: 35.555970, lng: 6.174140 },
+        "سطيف": { lat: 36.191200, lng: 5.413700 },
+        "تلمسان": { lat: 34.878300, lng: -1.315000 },
+        "الشلف": { lat: 36.165400, lng: 1.334700 },
+        "غرداية": { lat: 32.487400, lng: 3.677500 }
+    };
+    
+    // حساب اتجاه القبلة
+    function calculateQiblaDirection(userLat, userLng) {
+        const phiK = KAABA_COORDS.lat * Math.PI / 180.0;
+        const lambdaK = KAABA_COORDS.lng * Math.PI / 180.0;
+        const phi = userLat * Math.PI / 180.0;
+        const lambda = userLng * Math.PI / 180.0;
+        const psi = 180.0 / Math.PI * Math.atan2(
+            Math.sin(lambdaK - lambda),
+            Math.cos(phi) * Math.tan(phiK) - 
+            Math.sin(phi) * Math.cos(lambdaK - lambda)
+        );
+        
+        return (psi + 360.0) % 360.0;
+    }
+    
+    // تحديث البوصلة
+    function updateCompass(qiblaAngle) {
+        // تدوير سهم الكعبة
+        qiblaArrow.style.transform = `translate(-50%, -50%) rotate(${qiblaAngle}deg)`;
+        
+        // عرض معلومات القبلة
+        qiblaAngle.textContent = `اتجاه القبلة: ${qiblaAngle.toFixed(1)} درجة`;
+    }
+    
+    // معالجة اختيار الولاية
+    wilayaSelect.addEventListener('change', function() {
+        if (this.value) {
+            const [lat, lng] = this.value.split(',').map(Number);
+            const wilayaName = this.options[this.selectedIndex].text;
+            qiblaLocation.textContent = `الولاية: ${wilayaName}`;
+            
+            const angle = calculateQiblaDirection(lat, lng);
+            updateCompass(angle);
+        }
+    });
+    
+    // تحديث البوصلة عند النقر على الزر
+    qiblaBtn.addEventListener('click', function() {
+        if (wilayaSelect.value) {
+            wilayaSelect.dispatchEvent(new Event('change'));
+        } else {
+            alert('الرجاء اختيار ولاية من القائمة');
+        }
+    });
+    
+    // استخدام جيولوكيشن الجهاز إن أمكن
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(position => {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            
+            qiblaLocation.textContent = `تم تحديد موقعك تلقائيًا`;
+            
+            const angle = calculateQiblaDirection(lat, lng);
+            updateCompass(angle);
+        }, error => {
+            console.error('خطأ في تحديد الموقع:', error);
+            qiblaLocation.textContent = 'تعذر تحديد موقعك. الرجاء اختيار ولايتك يدويًا';
+        });
+    } else {
+        qiblaLocation.textContent = 'المتصفح لا يدخدم خدمة الموقع. الرجاء اختيار ولايتك يدويًا';
+    }
+    
+    // دعم البوصلة الداخلية للجوال
+    if (window.DeviceOrientationEvent) {
+        window.addEventListener('deviceorientation', event => {
+            if (event.alpha !== null) {
+                const compassHeading = 360 - event.alpha; // تعديل اتجاه البوصلة
+                qiblaArrow.style.transform = `translate(-50%, -50%) rotate(${compassHeading}deg)`;
+            }
+        });
+    }
+});
+// تحديات يومية عشوائية
+const dailyChallenges = [
+    "اتصل بوالديك اليوم واطمئن عليهما، وقل لهما كلمة طيبة تشعرهما بحبك ودعائك لهما.",
+    "تصدق بجزء من مالك اليوم، ولو كان قليلاً، وأخف ذلك قدر المستطاع.",
+    "اقرأ صفحة من القرآن بتدبر وتفكر في معاني الآيات.",
+    "قم بالصلوات الخمس في وقتها مع الجماعة في المسجد.",
+    "أرسل رسالة لصديق قديم تسأل عنه وتذكره بخير.",
+    "قم بعمل تطوعي صغير اليوم، مثل مساعدة جار أو تنظيف مكان عام.",
+    "امتنع عن الغيبة والنميمة اليوم، واحفظ لسانك.",
+    "قم بزيارة قريب أو جار، أو اطمئن عليه هاتفياً إذا لم تستطع الزيارة.",
+    "أدِ سنة الصبح في وقتها، وصلي ركعتي الضحى.",
+    "اقضِ وقتاً خاصاً مع أفراد أسرتك دون الهاتف أو التلفاز."
+];
+
+// دالة قبول التحدي
+function acceptChallenge() {
+    // إظهار رسالة تأكيد
+    const notification = document.createElement('div');
+    notification.innerHTML = `
+        <div style="position: fixed; top: 20px; right: 20px; background: #D4AF37; color: white; padding: 15px; border-radius: 10px; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+            <i class="fas fa-check-circle"></i> تم قبول التحدي بنجاح! الله يوفقك
+        </div>
+    `;
+    document.body.appendChild(notification);
+    
+    // إزالة الرسالة بعد 3 ثوانٍ
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
 }
+
+// دالة توليد تحديات جديدة
+function newChallenge() {
+    // اختيار تحدٍ عشوائي من القائمة
+    const randomChallenge = dailyChallenges[Math.floor(Math.random() * dailyChallenges.length)];
+    
+    // تحديث وصف التحدي
+    document.querySelector('.challenge-description').textContent = randomChallenge;
+    
+    // إظهار رسالة تحديث
+    const notification = document.createElement('div');
+    notification.innerHTML = `
+        <div style="position: fixed; top: 20px; right: 20px; background: #2e7d32; color: white; padding: 15px; border-radius: 10px; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+            <i class="fas fa-sync-alt"></i> تم تحديث التحدي بنجاح!
+        </div>
+    `;
+    document.body.appendChild(notification);
+    
+    // إزالة الرسالة بعد 3 ثوانٍ
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+
+// تهيئة تحدٍ عشوائي عند تحميل الصفحة
+window.addEventListener('DOMContentLoaded', () => {
+    const randomChallenge = dailyChallenges[Math.floor(Math.random() * dailyChallenges.length)];
+    const challengeElement = document.querySelector('.challenge-description');
+    if (challengeElement) {
+        challengeElement.textContent = randomChallenge;
+    }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const grid = document.getElementById("prayerGrid");
+    const locationInfo = document.getElementById("locationInfo");
+    const countdown = document.getElementById("countdownToNextPrayer");
+    const today = new Date().toISOString().split('T')[0];
+
+    fetch("prayer_times_2025_dz.json")
+        .then(response => response.json())
+        .then(data => {
+            const entry = data.find(e => e.date === today);
+            if (!entry) {
+                grid.innerHTML = "<p>لا توجد بيانات متاحة لهذا اليوم.</p>";
+                return;
+            }
+
+            locationInfo.textContent = "الجزائر العاصمة";
+            const times = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
+            grid.innerHTML = "";
+
+            times.forEach(prayer => {
+                const time = entry[prayer];
+                const card = document.createElement("div");
+                card.className = "prayer-card";
+                card.innerHTML = `
+                    <div class="prayer-name">${translatePrayer(prayer)}</div>
+                    <div class="prayer-time">${time}</div>
+                    <i class="fas fa-clock"></i>
+                `;
+                grid.appendChild(card);
+            });
+
+            updateCountdown(entry);
+        });
+
+    function translatePrayer(name) {
+        const map = {
+            Fajr: "الفجر",
+            Dhuhr: "الظهر",
+            Asr: "العصر",
+            Maghrib: "المغرب",
+            Isha: "العشاء"
+        };
+        return map[name] || name;
+    }
+
+    function updateCountdown(entry) {
+        const now = new Date();
+        const prayers = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
+        let nextPrayer = null;
+        let nextTime = null;
+
+        for (let prayer of prayers) {
+            const [h, m] = entry[prayer].split(":");
+            const prayerTime = new Date();
+            prayerTime.setHours(+h, +m, 0);
+
+            if (prayerTime > now) {
+                nextPrayer = translatePrayer(prayer);
+                nextTime = prayerTime;
+                break;
+            }
+        }
+
+        if (!nextTime) {
+            countdown.textContent = "انتهت صلوات اليوم";
+            return;
+        }
+
+        function update() {
+            const now = new Date();
+            let diff = Math.max(0, Math.floor((nextTime - now) / 1000));
+
+            const hrs = String(Math.floor(diff / 3600)).padStart(2, "0");
+            const mins = String(Math.floor((diff % 3600) / 60)).padStart(2, "0");
+            const secs = String(diff % 60).padStart(2, "0");
+
+            countdown.innerHTML = `<i class="fas fa-hourglass-half"></i> ${nextPrayer} بعد ${hrs}:${mins}:${secs}`;
+
+            if (diff > 0) {
+                setTimeout(update, 1000);
+            }
+        }
+
+        update();
+    }
+});
 </script>
-<script src="main.js"></script>
 
 </body>
 </html>
