@@ -43,7 +43,7 @@
             color: var(--darker);
             min-height: 100vh;
             padding-bottom: 80px;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23f8f8f8" opacity="0.5"/><path d="M20,20 Q50,10 80,20 T100,50 T80,80 T50,90 T20,80 T0,50 T20,20 Z" fill="none" stroke="%23D4AF37" stroke-width="0.3" opacity="0.2"/></svg>');
+            background-color: #EEEEEE;
             background-attachment: fixed;
         }
         
@@ -1344,121 +1344,8 @@
         font-size: 1.1rem;
     }
 }
-/* أنماط قسم القبلة */
-.qibla-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 30px;
-    margin-bottom: 30px;
-}
 
-.compass {
-    width: 280px;
-    height: 280px;
-    position: relative;
-}
 
-.compass-circle {
-    width: 100%;
-    height: 100%;
-    border: 3px solid var(--dark-gold);
-    border-radius: 50%;
-    position: relative;
-    box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
-    background: var(--white);
-}
-
-.direction {
-    position: absolute;
-    font-weight: bold;
-    color: var(--dark-gold);
-    font-size: 1.4rem;
-}
-
-.direction:nth-child(1) { top: 10px; left: 50%; transform: translateX(-50%); } /* N */
-.direction:nth-child(2) { top: 50%; right: 10px; transform: translateY(-50%); } /* E */
-.direction:nth-child(3) { bottom: 10px; left: 50%; transform: translateX(-50%); } /* S */
-.direction:nth-child(4) { top: 50%; left: 10px; transform: translateY(-50%); } /* W */
-
-.kaaba-arrow {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 3.5rem;
-    color: var(--dark-gold);
-    transition: transform 0.5s ease;
-    z-index: 10;
-    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-}
-
-.compass-needle {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 80%;
-    height: 3px;
-    background: var(--gold);
-    transform-origin: left center;
-    z-index: 5;
-}
-
-.qibla-info {
-    text-align: center;
-    background: var(--off-white);
-    padding: 20px;
-    border-radius: 15px;
-    width: 100%;
-    max-width: 400px;
-}
-
-.qibla-location {
-    font-size: 1.3rem;
-    font-weight: 600;
-    margin-bottom: 10px;
-    color: var(--dark-gold);
-}
-
-.qibla-angle {
-    font-size: 1.2rem;
-    margin-bottom: 15px;
-}
-
-.qibla-instruction {
-    font-size: 1rem;
-    color: #666;
-    font-style: italic;
-}
-
-.qibla-controls {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-.qibla-explanation {
-    background: var(--off-white);
-    padding: 25px;
-    border-radius: 20px;
-    margin-top: 30px;
-    border-left: 4px solid var(--gold);
-}
-
-.qibla-explanation h3 {
-    color: var(--dark-gold);
-    margin-bottom: 15px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-/* التأكد من أن الأيقونة موجودة */
-.fa-kaaba:before {
-    content: "\f66b"; /* رمز أيقونة الكعبة في FontAwesome */
-}
 /* تنسيقات قسم تعزيز العلاقات */
 .relations-section {
     padding: 80px 20px;
@@ -1973,7 +1860,7 @@
                     <i class="fas fa-mosque"></i>
                 </div>
                 <h1> مَوَاقِيتُ الإِيْمَان </h1>
-                <p class="app-description">تطبيقك الإسلامي الشامل للصلاة، الأذكار، الأحاديث، القرآن، الزواج، التربية، وأكثر. يعمل بدون إنترنت!</p>
+                <p class="app-description">تطبيقك الإسلامي الشامل للصلاة، الأذكار، الأحاديث، القرآن، الزواج، التربية، وأكثر. !</p>
             </div>
         </header>
         
@@ -1982,9 +1869,7 @@
             <div class="tab active" data-target="prayer-times">
                 <i class="fas fa-clock"></i> أوقات الصلاة
             </div>
-             <div class="tab" data-target="qiblah">
-                <i class="fas fa-compass"></i> القبلة
-            </div>
+           
             <div class="tab" data-target="azkar">
                 <i class="fas fa-praying-hands"></i> الأذكار
             </div>
@@ -2132,131 +2017,7 @@
                 </div>
             </div>
         </div>
-        <div id="qiblah" class="content-section">
-    <h2 class="section-title">
-        <i class="fas fa-compass"></i> اتجاه القبلة
-    </h2>
-    
-    <div class="qibla-container">
-        <!-- البوصلة -->
-        <div class="compass">
-            <div class="compass-circle">
-                <div class="direction">N</div>
-                <div class="direction">E</div>
-                <div class="direction">S</div>
-                <div class="direction">W</div>
-                <div class="kaaba-arrow" id="qiblaArrow">
-                    <i class="fas fa-kaaba"></i>
-                </div>
-                <div class="compass-needle"></div>
-            </div>
-        </div>
-        
-        <!-- معلومات القبلة -->
-        <div class="qibla-info">
-            <div class="qibla-location" id="qiblaLocation">
-                جاري تحديد موقعك...
-            </div>
-            <div class="qibla-angle" id="qiblaAngle">
-                جاري حساب اتجاه القبلة...
-            </div>
-            <div class="qibla-instruction">
-                <i class="fas fa-info-circle"></i> ثبت جهازك أفقيًا للحصول على قراءة دقيقة
-            </div>
-        </div>
-    </div>
-    
-    <!-- اختيار الولاية -->
-
-    
-    <!-- اختيار الولاية -->
-    <div class="qibla-controls">
-        <select id="qibla-wilaya-select" class="form-control">
-            <option value="">-- اختر ولايتك --</option>
-            <!-- الولايات الجزائرية كاملة (58 ولاية) -->
-            <option value="36.752887,3.042048">الجزائر العاصمة</option>
-            <option value="36.462140,2.738730">البليدة</option>
-            <option value="36.267500,2.750000">المدية</option>
-            <option value="36.365000,4.895000">برج بوعريريج</option>
-            <option value="36.619500,3.225400">بومرداس</option>
-            <option value="36.726200,4.049400">البويرة</option>
-            <option value="36.750000,4.916700">تيزي وزو</option>
-            <option value="36.820600,7.747200">الطارف</option>
-            <option value="36.460000,7.427800">سوق السبت</option>
-            <option value="36.365300,6.614700">ميلة</option>
-            <option value="36.365268,6.614702">قسنطينة</option>
-            <option value="36.191200,5.413700">سطيف</option>
-            <option value="36.268300,7.434900">عين فكرون</option>
-            <option value="36.165400,1.334700">الشلف</option>
-            <option value="36.750839,5.056733">بجاية</option>
-            <option value="35.825400,7.111800">سكيكدة</option>
-            <option value="35.388900,8.120800">تبسة</option>
-            <option value="35.390000,8.140000">قالمة</option>
-            <option value="35.408100,7.143800">سوق أهراس</option>
-            <option value="35.598600,5.543300">خنشلة</option>
-            <option value="35.555970,6.174140">باتنة</option>
-            <option value="35.630000,5.911110">أم البواقي</option>
-            <option value="35.297500,1.028400">البيض</option>
-            <option value="35.189200,3.545000">الجلفة</option>
-            <option value="35.066700,1.050000">تيارت</option>
-            <option value="35.402200,-0.140800">سيدي بلعباس</option>
-            <option value="35.737220,0.555830">معسكر</option>
-            <option value="35.944100,0.090100">غليزان</option>
-            <option value="35.212200,4.187280">مسعد</option>
-            <option value="35.611100,-0.616700">سعيدة</option>
-            <option value="35.207830,2.311820">بوسعادة</option>
-            <option value="35.189200,3.545000">عين وسارة</option>
-            <option value="34.861400,-1.339000">سيدي بلعباس</option>
-            <option value="34.850000,-1.333300">عين تموشنت</option>
-            <option value="34.878300,-1.315000">تلمسان</option>
-            <option value="34.154400,3.503090">الأغواط</option>
-            <option value="33.803300,2.865200">الوادي</option>
-            <option value="33.367900,6.867500">ورقلة</option>
-            <option value="33.116700,6.083300">تقرت</option>
-            <option value="32.487400,3.677500">غرداية</option>
-            <option value="31.616700,-2.216700">بشار</option>
-            <option value="27.874200,-0.293800">أدرار</option>
-            <option value="29.233300,0.283300">تيميمون</option>
-            <option value="26.500000,8.466700">إليزي</option>
-            <option value="22.789000,5.522700">تمنراست</option>
-            <option value="35.931100,0.089200">غليزان</option>
-            <option value="36.907657,7.767120">عنابة</option>
-            <option value="35.697654,0.635773">وهران</option>
-            <option value="35.700000,0.150000">مستغانم</option>
-            <option value="35.212200,4.187280">المسيلة</option>
-            <option value="35.402200,-0.140800">سعيدة</option>
-            <option value="34.154400,3.503090">الأغواط</option>
-            <option value="35.189200,3.545000">الجلفة</option>
-            <option value="35.598600,5.543300">خنشلة</option>
-            <option value="35.408100,7.143800">سوق أهراس</option>
-            <option value="36.263000,6.693600">ميلة</option>
-            <option value="35.297500,1.028400">البيض</option>
-            <option value="33.803300,2.865200">الوادي</option>
-            <option value="33.367900,6.867500">ورقلة</option>
-            <option value="31.616700,-2.216700">بشار</option>
-            <option value="27.874200,-0.293800">أدرار</option>
-            <option value="36.267500,2.750000">البليدة</option>
-            <option value="35.737220,0.555830">وهران</option>
-            <option value="36.365268,6.614702">قسنطينة</option>
-            <option value="36.907657,7.767120">عنابة</option>
-            <option value="36.750839,5.056733">بجاية</option>
-            <option value="35.555970,6.174140">باتنة</option>
-            <option value="36.191200,5.413700">سطيف</option>
-            <option value="34.878300,-1.315000">تلمسان</option>
-            <option value="36.165400,1.334700">الشلف</option>
-            <option value="32.487400,3.677500">غرداية</option>
-        </select>
-        <button class="btn" id="qibla-btn">
-            <i class="fas fa-location-arrow"></i> تحديث الاتجاه
-        </button>
-    </div>
-
-    
-    <div class="qibla-explanation">
-        <h3><i class="fas fa-lightbulb"></i> كيف تعمل بوصلة القبلة؟</h3>
-        <p>تقوم البوصلة باستخدام بيانات الجوال لتحديد اتجاه القبلة في مكة المكرمة. عند تثبيت الجهاز أفقيًا، يظهر سهم الكعبة الاتجاه الصحيح للصلاة.</p>
-    </div>
-</div>
+      
   <div class="container">
     <div id="taziz" class="content-section">
   <div class="container">
@@ -5885,107 +5646,7 @@ function schedulePrayerNotifications(prayerTimes) {
             }, timeDiff);
         }
     });
-}// ==== بوصلة القبلة ====
-document.addEventListener('DOMContentLoaded', function() {
-    const qiblaArrow = document.getElementById('qiblaArrow');
-    const qiblaLocation = document.getElementById('qiblaLocation');
-    const qiblaAngle = document.getElementById('qiblaAngle');
-    const wilayaSelect = document.getElementById('qibla-wilaya-select');
-    const qiblaBtn = document.getElementById('qibla-btn');
-    
-    // إحداثيات الكعبة المشرفة
-    const KAABA_COORDS = {
-        lat: 21.422487,
-        lng: 39.826206
-    };
-    
-    // بيانات الولايات الجزائرية
-    const algeriaWilayas = {
-        "الجزائر العاصمة": { lat: 36.752887, lng: 3.042048 },
-        "وهران": { lat: 35.697654, lng: 0.635773 },
-        "قسنطينة": { lat: 36.365268, lng: 6.614702 },
-        "عنابة": { lat: 36.907657, lng: 7.767120 },
-        "بجاية": { lat: 36.750839, lng: 5.056733 },
-        "باتنة": { lat: 35.555970, lng: 6.174140 },
-        "سطيف": { lat: 36.191200, lng: 5.413700 },
-        "تلمسان": { lat: 34.878300, lng: -1.315000 },
-        "الشلف": { lat: 36.165400, lng: 1.334700 },
-        "غرداية": { lat: 32.487400, lng: 3.677500 }
-    };
-    
-    // حساب اتجاه القبلة
-    function calculateQiblaDirection(userLat, userLng) {
-        const phiK = KAABA_COORDS.lat * Math.PI / 180.0;
-        const lambdaK = KAABA_COORDS.lng * Math.PI / 180.0;
-        const phi = userLat * Math.PI / 180.0;
-        const lambda = userLng * Math.PI / 180.0;
-        const psi = 180.0 / Math.PI * Math.atan2(
-            Math.sin(lambdaK - lambda),
-            Math.cos(phi) * Math.tan(phiK) - 
-            Math.sin(phi) * Math.cos(lambdaK - lambda)
-        );
-        
-        return (psi + 360.0) % 360.0;
-    }
-    
-    // تحديث البوصلة
-    function updateCompass(qiblaAngle) {
-        // تدوير سهم الكعبة
-        qiblaArrow.style.transform = `translate(-50%, -50%) rotate(${qiblaAngle}deg)`;
-        
-        // عرض معلومات القبلة
-        qiblaAngle.textContent = `اتجاه القبلة: ${qiblaAngle.toFixed(1)} درجة`;
-    }
-    
-    // معالجة اختيار الولاية
-    wilayaSelect.addEventListener('change', function() {
-        if (this.value) {
-            const [lat, lng] = this.value.split(',').map(Number);
-            const wilayaName = this.options[this.selectedIndex].text;
-            qiblaLocation.textContent = `الولاية: ${wilayaName}`;
-            
-            const angle = calculateQiblaDirection(lat, lng);
-            updateCompass(angle);
-        }
-    });
-    
-    // تحديث البوصلة عند النقر على الزر
-    qiblaBtn.addEventListener('click', function() {
-        if (wilayaSelect.value) {
-            wilayaSelect.dispatchEvent(new Event('change'));
-        } else {
-            alert('الرجاء اختيار ولاية من القائمة');
-        }
-    });
-    
-    // استخدام جيولوكيشن الجهاز إن أمكن
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(position => {
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
-            
-            qiblaLocation.textContent = `تم تحديد موقعك تلقائيًا`;
-            
-            const angle = calculateQiblaDirection(lat, lng);
-            updateCompass(angle);
-        }, error => {
-            console.error('خطأ في تحديد الموقع:', error);
-            qiblaLocation.textContent = 'تعذر تحديد موقعك. الرجاء اختيار ولايتك يدويًا';
-        });
-    } else {
-        qiblaLocation.textContent = 'المتصفح لا يدخدم خدمة الموقع. الرجاء اختيار ولايتك يدويًا';
-    }
-    
-    // دعم البوصلة الداخلية للجوال
-    if (window.DeviceOrientationEvent) {
-        window.addEventListener('deviceorientation', event => {
-            if (event.alpha !== null) {
-                const compassHeading = 360 - event.alpha; // تعديل اتجاه البوصلة
-                qiblaArrow.style.transform = `translate(-50%, -50%) rotate(${compassHeading}deg)`;
-            }
-        });
-    }
-});
+}
 // تحديات يومية عشوائية
 const dailyChallenges = [
     "اتصل بوالديك اليوم واطمئن عليهما، وقل لهما كلمة طيبة تشعرهما بحبك ودعائك لهما.",
